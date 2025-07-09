@@ -1,88 +1,12 @@
-# Expense Tracker App
+# React + Vite
 
-A personal finance management application to help track spending and manage budgets.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Expense Categories to Track
+Currently, two official plugins are available:
 
-### Essential Living Expenses
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- **Housing**: Rent/mortgage, utilities (electric, water, gas, internet), maintenance, property taxes
-- **Food**: Groceries, dining out, coffee shops, food delivery, snacks
-- **Transportation**: Gas/fuel, public transit, ride-sharing, car maintenance, parking, tolls
-- **Healthcare**: Doctor visits, prescriptions, dental, vision, insurance premiums, gym memberships
+## Expanding the ESLint configuration
 
-### Personal & Lifestyle
-
-- **Entertainment**: Movies, concerts, streaming services, games, hobbies, books
-- **Shopping**: Clothing, electronics, home goods, personal care items
-- **Education**: Courses, books, software, professional development
-- **Personal Care**: Haircuts, beauty products, spa services
-
-### Financial Obligations
-
-- **Debt Payments**: Credit cards, student loans, car loans, personal loans
-- **Insurance**: Health, auto, home, life insurance
-- **Subscriptions**: Software, apps, memberships, recurring services
-- **Taxes**: Income tax, property tax, sales tax (if tracking)
-
-### Special Categories
-
-- **Gifts & Donations**: Birthday gifts, holiday presents, charitable donations
-- **Travel**: Flights, hotels, meals while traveling, souvenirs
-- **Emergency Expenses**: Unexpected repairs, medical emergencies
-- **Investment**: Savings, retirement contributions, stock purchases
-
-## Key Features to Consider
-
-### Basic Tracking
-
-- **Daily/Weekly/Monthly Views**: See spending patterns over different time periods
-- **Category Breakdown**: Visual charts showing where money goes
-- **Search & Filter**: Find specific transactions quickly
-- **Notes**: Add context to transactions (e.g., "Birthday dinner with friends")
-
-### Budget Management
-
-- **Monthly Budgets**: Set spending limits per category
-- **Budget Alerts**: Get notified when approaching limits
-- **Rollover**: Carry unused budget to next month
-- **Flexible Budgets**: Adjust budgets based on income changes
-
-### Analysis & Insights
-
-- **Spending Trends**: See how spending changes over time
-- **Comparison**: Compare months or years
-- **Savings Goals**: Track progress toward financial goals
-- **Income Tracking**: Monitor money coming in vs. going out
-
-### Practical Features
-
-- **Receipt Storage**: Attach photos of receipts
-- **Recurring Expenses**: Automatically add regular bills
-- **Export Data**: Download reports for tax purposes
-- **Multiple Accounts**: Track checking, savings, credit cards separately
-
-## Getting Started Tips
-
-1. **Start Simple**: Begin with just 5-10 main categories
-2. **Track Everything**: Even small purchases add up
-3. **Be Consistent**: Record expenses daily or weekly
-4. **Set Realistic Goals**: Don't try to cut spending by 50% overnight
-5. **Review Regularly**: Check your spending patterns monthly
-
-## Common Tracking Methods
-
-- **Manual Entry**: Type in each transaction
-- **Receipt Photos**: Take pictures and categorize later
-- **Bank Import**: Connect to bank accounts (future feature)
-- **Voice Notes**: Quick voice-to-text for on-the-go tracking
-
-## Questions to Consider
-
-- Do you want to track income as well as expenses?
-- Are you tracking for personal use or sharing with family?
-- Do you prefer daily, weekly, or monthly budget cycles?
-- What's your primary goal: saving money, understanding spending, or both?
-- Do you want to set up alerts for overspending?
-
----
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
