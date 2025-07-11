@@ -1,15 +1,29 @@
 import React from "react";
 
-const Header = () => {
+const Header = ({ currentView, setCurrentView }) => {
+  const navItems = [
+    { id: "dashboard", label: "Dashboard" },
+    { id: "expenses", label: "Expenses" },
+    { id: "budgets", label: "Budgets" },
+    { id: "analytics", label: "Analytics" },
+  ];
+
   return (
     <header className="header">
       <div className="header-content">
         <h1 className="header-title">Expense Tracker</h1>
         <nav className="header-nav">
-          <button className="nav-button">Dashboard</button>
-          <button className="nav-button">Expenses</button>
-          <button className="nav-button">Budgets</button>
-          <button className="nav-button">Analytics</button>
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              className={`nav-button ${
+                currentView === item.id ? "nav-button--active" : ""
+              }`}
+              onClick={() => setCurrentView(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
         </nav>
       </div>
     </header>
