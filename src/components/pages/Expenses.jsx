@@ -3,7 +3,7 @@ import { useExpense } from "../../hooks/useExpense";
 import { formatCurrency } from "../../utils/currency";
 import Card from "../ui/Card";
 import Button from "../ui/Button";
-import AddExpenseModal from "../forms/AddExpenseModal";
+import AddExpense from "../forms/AddExpenseModal";
 
 const Expenses = () => {
   const { expenses, categories, deleteExpense } = useExpense();
@@ -109,7 +109,7 @@ const Expenses = () => {
       </div>
 
       {showAddModal && (
-        <AddExpenseModal
+        <AddExpense
           onClose={() => setShowAddModal(false)}
           onSuccess={() => setShowAddModal(false)}
         />

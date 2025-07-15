@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useExpense } from "../../hooks/useExpense";
-import AddExpenseModal from "../forms/AddExpenseModal";
+import AddExpense from "../forms/AddExpenseModal";
 
 const Sidebar = ({ setCurrentView }) => {
   const { categories, expenses } = useExpense();
@@ -73,7 +73,7 @@ const Sidebar = ({ setCurrentView }) => {
       </aside>
 
       {showAddModal && (
-        <AddExpenseModal
+        <AddExpense
           onClose={() => setShowAddModal(false)}
           onSuccess={() => {
             setShowAddModal(false);

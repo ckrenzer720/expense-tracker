@@ -3,12 +3,19 @@ import { useExpense } from "../../hooks/useExpense";
 import { validateExpense } from "../../utils/validation";
 import Button from "../ui/Button";
 
-const AddExpenseModal = ({ onClose, onSuccess }) => {
+const AddExpense = ({ onClose, onSuccess }) => {
   const { categories, addExpense } = useExpense();
+
+  // Set default date to today
+  const today = new Date().toISOString().split("T")[0];
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() + 1); // Allow up to 1 year in future
+  const maxDateString = maxDate.toISOString().split("T")[0];
+
   const [formData, setFormData] = useState({
     amount: "",
     category: "",
-    date: new Date().toISOString().split("T")[0],
+    date: today,
     notes: "",
   });
   const [errors, setErrors] = useState({});
@@ -121,15 +128,24 @@ const AddExpenseModal = ({ onClose, onSuccess }) => {
 
           <div className="form-group">
             <label htmlFor="date">Date *</label>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-              className={errors.date ? "form-input error" : "form-input"}
-              disabled={isSubmitting}
-            />
+            <div className="date-input-wrapper">
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={formData.date}
+                onChange={handleInputChange}
+                min="2020-01-01"
+                max={maxDateString}
+                className={errors.date ? "form-input error" : "form-input"}
+                disabled={isSubmitting}
+              />
+              <span className="date-icon">📅</span>
+            </div>
+            <small className="form-help">
+              You can select any date from 2020 onwards, up to 1 year in the
+              future
+            </small>
             {errors.date && (
               <span className="error-message">{errors.date}</span>
             )}
@@ -172,4 +188,4 @@ const AddExpenseModal = ({ onClose, onSuccess }) => {
   );
 };
 
-export default AddExpenseModal;
+export default AddExpense;

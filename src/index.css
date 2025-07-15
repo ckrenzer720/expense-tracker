@@ -797,12 +797,71 @@ button:focus-visible {
   background: white;
   transition: all 0.2s;
   box-sizing: border-box;
+  cursor: text;
+}
+
+.form-input:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
 }
 
 .form-input:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Special hover effect for date inputs */
+input[type="date"].form-input {
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="date"].form-input:hover {
+  border-color: var(--primary);
+  background-color: rgba(59, 130, 246, 0.02);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  transform: translateY(-1px);
+}
+
+input[type="date"].form-input:focus {
+  border-color: var(--primary);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(0);
+}
+
+/* Date input wrapper and icon */
+.date-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-input-wrapper .form-input {
+  padding-right: 2.5rem;
+}
+
+.date-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  font-size: 1rem;
+}
+
+.date-input-wrapper:hover .date-icon {
+  opacity: 1;
+}
+
+.date-input-wrapper:hover .form-input {
+  border-color: var(--primary);
+  background-color: rgba(59, 130, 246, 0.02);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  transform: translateY(-1px);
 }
 
 .form-input.error {
@@ -822,6 +881,14 @@ button:focus-visible {
 textarea.form-input {
   resize: vertical;
   min-height: 80px;
+}
+
+.form-help {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-style: italic;
 }
 
 .error-message {
