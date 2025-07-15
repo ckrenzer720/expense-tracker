@@ -1,7 +1,10 @@
 import React from "react";
-import { useExpense } from "../../hooks/useExpense";
-import { formatCurrency, getCurrentMonthExpenses } from "../../utils/currency";
-import Card from "../ui/Card";
+import { useExpense } from "../../../hooks/useExpense";
+import {
+  formatCurrency,
+  getCurrentMonthExpenses,
+} from "../../../utils/currency";
+import { Card } from "../../common";
 
 const Analytics = () => {
   const { expenses, categories } = useExpense();

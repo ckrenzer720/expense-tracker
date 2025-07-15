@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useExpense } from "../../hooks/useExpense";
-import { formatCurrency, calculateTotalByCategory } from "../../utils/currency";
-import Card from "../ui/Card";
-import Button from "../ui/Button";
+import { useExpense } from "../../../hooks/useExpense";
+import {
+  formatCurrency,
+  calculateTotalByCategory,
+} from "../../../utils/currency";
+import { Card, Button } from "../../common";
 
 const Budgets = () => {
   const { categories, expenses } = useExpense();

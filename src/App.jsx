@@ -1,25 +1,28 @@
 import React, { useState } from "react";
 import { ExpenseProvider } from "./context/ExpenseProvider";
-import Header from "./components/layout/Header";
-import Sidebar from "./components/layout/Sidebar";
-import Dashboard from "./components/pages/Dashboard";
-import Expenses from "./components/pages/Expenses";
-import Budgets from "./components/pages/Budgets";
-import Analytics from "./components/pages/Analytics";
+import {
+  Header,
+  Sidebar,
+  Dashboard,
+  Expenses,
+  Budgets,
+  Analytics,
+} from "./components";
+import { ROUTES } from "./constants/routes";
 import "./index.css";
 
 function App() {
-  const [currentView, setCurrentView] = useState("dashboard");
+  const [currentView, setCurrentView] = useState(ROUTES.DASHBOARD);
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case "dashboard":
+      case ROUTES.DASHBOARD:
         return <Dashboard />;
-      case "expenses":
+      case ROUTES.EXPENSES:
         return <Expenses />;
-      case "budgets":
+      case ROUTES.BUDGETS:
         return <Budgets />;
-      case "analytics":
+      case ROUTES.ANALYTICS:
         return <Analytics />;
       default:
         return <Dashboard />;

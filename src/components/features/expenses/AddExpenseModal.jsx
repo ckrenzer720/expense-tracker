@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useExpense } from "../../hooks/useExpense";
-import { validateExpense } from "../../utils/validation";
-import Button from "../ui/Button";
+import { useExpense } from "../../../hooks/useExpense";
+import { validateExpense } from "../../../utils/validation";
+import { Button } from "../../common";
 
 const AddExpense = ({ onClose, onSuccess }) => {
   const { categories, addExpense } = useExpense();

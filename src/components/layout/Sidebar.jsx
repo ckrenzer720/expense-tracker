@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useExpense } from "../../hooks/useExpense";
-import AddExpense from "../forms/AddExpenseModal";
+import { AddExpenseModal } from "../features/expenses";
+import { ROUTES } from "../../constants/routes";
 
 const Sidebar = ({ setCurrentView }) => {
-  const { categories, expenses } = useExpense();
+  const { categories, expenses, budgets } = useExpense();
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -13,7 +14,7 @@ const Sidebar = ({ setCurrentView }) => {
 
   const handleCategoryClick = (categoryId) => {
     setSelectedCategory(categoryId);
-    setCurrentView("expenses");
+    setCurrentView(ROUTES.EXPENSES);
   };
 
   const getCategoryExpenseCount = (categoryId) => {
@@ -24,6 +25,18 @@ const Sidebar = ({ setCurrentView }) => {
     return expenses
       .filter((expense) => expense.category === categoryId)
       .reduce((total, expense) => total + expense.amount, 0);
+  };
+
+  const getTotalBudget = () => {
+    return Object.values(budgets).reduce((sum, budget) => sum + budget, 0);
+  };
+
+  const getTotalSpent = () => {
+    return expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  };
+
+  const getTotalRemaining = () => {
+    return getTotalBudget() - getTotalSpent();
   };
 
   return (
@@ -65,19 +78,19 @@ const Sidebar = ({ setCurrentView }) => {
         <div className="sidebar-section">
           <h3>Budget Overview</h3>
           <div className="budget-summary">
-            <p>Monthly Budget: $2,000</p>
-            <p>Spent: $1,250</p>
-            <p>Remaining: $750</p>
+            <p>Monthly Budget: ${getTotalBudget().toFixed(2)}</p>
+            <p>Spent: ${getTotalSpent().toFixed(2)}</p>
+            <p>Remaining: ${getTotalRemaining().toFixed(2)}</p>
           </div>
         </div>
       </aside>
 
       {showAddModal && (
-        <AddExpense
+        <AddExpenseModal
           onClose={() => setShowAddModal(false)}
           onSuccess={() => {
             setShowAddModal(false);
-            setCurrentView("expenses");
+            setCurrentView(ROUTES.EXPENSES);
           }}
         />
       )}

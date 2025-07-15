@@ -1,12 +1,11 @@
 import React from "react";
-import { useExpense } from "../../hooks/useExpense";
+import { useExpense } from "../../../hooks/useExpense";
 import {
   formatCurrency,
   calculateTotal,
   getCurrentMonthExpenses,
-} from "../../utils/currency";
-import Card from "../ui/Card";
-import Button from "../ui/Button";
+} from "../../../utils/currency";
+import { Card, Button } from "../../common";
 
 const Dashboard = () => {
   const { expenses, categories } = useExpense();

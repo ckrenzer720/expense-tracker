@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useExpense } from "../../hooks/useExpense";
-import { formatCurrency } from "../../utils/currency";
-import Card from "../ui/Card";
-import Button from "../ui/Button";
-import AddExpense from "../forms/AddExpenseModal";
+import { useExpense } from "../../../hooks/useExpense";
+import { formatCurrency } from "../../../utils/currency";
+import { Card, Button } from "../../common";
+import AddExpenseModal from "./AddExpenseModal";
+import { PAGE_TITLES, PAGE_DESCRIPTIONS } from "../../../constants/routes";
 
 const Expenses = () => {
   const { expenses, categories, deleteExpense } = useExpense();
@@ -35,8 +35,8 @@ const Expenses = () => {
     <div className="container">
       <div className="expenses-header">
         <div>
-          <h2>Expenses</h2>
-          <p>Manage and track your expenses</p>
+          <h2>{PAGE_TITLES.expenses}</h2>
+          <p>{PAGE_DESCRIPTIONS.expenses}</p>
         </div>
         <Button onClick={() => setShowAddModal(true)}>+ Add Expense</Button>
       </div>
@@ -109,7 +109,7 @@ const Expenses = () => {
       </div>
 
       {showAddModal && (
-        <AddExpense
+        <AddExpenseModal
           onClose={() => setShowAddModal(false)}
           onSuccess={() => setShowAddModal(false)}
         />
