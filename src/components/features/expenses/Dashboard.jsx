@@ -13,14 +13,18 @@ const Dashboard = () => {
   const totalSpent = calculateTotal(currentMonthExpenses);
   const recentExpenses = expenses.slice(0, 5);
 
-  const getCategoryName = (categoryId) => {
+  const getCategoryDisplayName = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
     return category ? category.name : "Unknown";
   };
 
-  const getCategoryIcon = (categoryId) => {
+  const getCategoryDisplayIcon = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
     return category ? category.icon : "📝";
+  };
+
+  const handleViewAllExpenses = () => {
+    window.location.reload(); // This will be replaced with navigation
   };
 
   return (
@@ -58,11 +62,11 @@ const Dashboard = () => {
               {recentExpenses.map((expense) => (
                 <div key={expense.id} className="expense-item">
                   <div className="expense-icon">
-                    {getCategoryIcon(expense.category)}
+                    {getCategoryDisplayIcon(expense.category)}
                   </div>
                   <div className="expense-details">
                     <div className="expense-category">
-                      {getCategoryName(expense.category)}
+                      {getCategoryDisplayName(expense.category)}
                     </div>
                     <div className="expense-notes">
                       {expense.notes || "No notes"}
@@ -82,7 +86,7 @@ const Dashboard = () => {
             <Button
               variant="secondary"
               size="small"
-              onClick={() => window.location.reload()} // This will be replaced with navigation
+              onClick={handleViewAllExpenses}
             >
               View All Expenses
             </Button>

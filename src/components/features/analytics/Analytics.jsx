@@ -14,7 +14,7 @@ const Analytics = () => {
     0
   );
 
-  const getCategoryData = () => {
+  const getCategoryAnalyticsData = () => {
     return categories
       .map((category) => {
         const categoryExpenses = currentMonthExpenses.filter(
@@ -36,13 +36,13 @@ const Analytics = () => {
       .filter((category) => category.total > 0);
   };
 
-  const getTopCategories = () => {
-    return getCategoryData()
+  const getTopSpendingCategories = () => {
+    return getCategoryAnalyticsData()
       .sort((a, b) => b.total - a.total)
       .slice(0, 5);
   };
 
-  const getMonthlyTrend = () => {
+  const getMonthlySpendingTrend = () => {
     const months = [
       "Jan",
       "Feb",
@@ -66,9 +66,9 @@ const Analytics = () => {
     }));
   };
 
-  const categoryData = getCategoryData();
-  const topCategories = getTopCategories();
-  const monthlyTrend = getMonthlyTrend();
+  const categoryAnalyticsData = getCategoryAnalyticsData();
+  const topSpendingCategories = getTopSpendingCategories();
+  const monthlySpendingTrend = getMonthlySpendingTrend();
 
   return (
     <div className="container">
@@ -89,7 +89,7 @@ const Analytics = () => {
               <div className="stat-label">Transactions</div>
             </div>
             <div className="overview-stat">
-              <div className="stat-value">{categoryData.length}</div>
+              <div className="stat-value">{categoryAnalyticsData.length}</div>
               <div className="stat-label">Categories Used</div>
             </div>
             <div className="overview-stat">
@@ -105,13 +105,13 @@ const Analytics = () => {
       <div className="analytics-content">
         <div className="analytics-grid">
           <Card title="Spending by Category" className="category-breakdown">
-            {categoryData.length === 0 ? (
+            {categoryAnalyticsData.length === 0 ? (
               <p className="no-data">
                 No spending data available for this month.
               </p>
             ) : (
               <div className="category-chart">
-                {categoryData.map((category) => (
+                {categoryAnalyticsData.map((category) => (
                   <div key={category.id} className="category-bar">
                     <div className="category-info">
                       <span className="category-icon">{category.icon}</span>
@@ -136,11 +136,11 @@ const Analytics = () => {
           </Card>
 
           <Card title="Top Spending Categories" className="top-categories">
-            {topCategories.length === 0 ? (
+            {topSpendingCategories.length === 0 ? (
               <p className="no-data">No spending data available.</p>
             ) : (
               <div className="top-list">
-                {topCategories.map((category, index) => (
+                {topSpendingCategories.map((category, index) => (
                   <div key={category.id} className="top-item">
                     <div className="rank">#{index + 1}</div>
                     <div className="category-info">
@@ -163,7 +163,7 @@ const Analytics = () => {
 
           <Card title="Monthly Spending Trend" className="monthly-trend">
             <div className="trend-chart">
-              {monthlyTrend.map((data, index) => (
+              {monthlySpendingTrend.map((data, index) => (
                 <div key={index} className="trend-bar">
                   <div className="trend-label">{data.month}</div>
                   <div className="trend-bar-container">
@@ -195,10 +195,10 @@ const Analytics = () => {
                 <div className="insight-content">
                   <h4>Biggest Expense Category</h4>
                   <p>
-                    {topCategories[0]
+                    {topSpendingCategories[0]
                       ? `${
-                          topCategories[0].name
-                        } (${topCategories[0].percentage.toFixed(1)}%)`
+                          topSpendingCategories[0].name
+                        } (${topSpendingCategories[0].percentage.toFixed(1)}%)`
                       : "No data available"}
                   </p>
                 </div>
@@ -217,8 +217,8 @@ const Analytics = () => {
                 <div className="insight-content">
                   <h4>Most Active Category</h4>
                   <p>
-                    {topCategories[0]
-                      ? `${topCategories[0].name} (${topCategories[0].count} transactions)`
+                    {topSpendingCategories[0]
+                      ? `${topSpendingCategories[0].name} (${topSpendingCategories[0].count} transactions)`
                       : "No data available"}
                   </p>
                 </div>

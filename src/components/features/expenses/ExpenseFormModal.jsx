@@ -3,8 +3,8 @@ import { useExpense } from "../../../hooks/useExpense";
 import { validateExpense } from "../../../utils/validation";
 import { Button } from "../../common";
 
-const AddExpense = ({ onClose, onSuccess }) => {
-  const { categories, addExpense } = useExpense();
+const ExpenseFormModal = ({ onClose, onSuccess }) => {
+  const { categories, createExpense } = useExpense();
 
   // Set default date to today
   const today = new Date().toISOString().split("T")[0];
@@ -18,7 +18,7 @@ const AddExpense = ({ onClose, onSuccess }) => {
     date: today,
     notes: "",
   });
-  const [errors, setErrors] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
@@ -29,20 +29,20 @@ const AddExpense = ({ onClose, onSuccess }) => {
     }));
 
     // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({
+    if (validationErrors[name]) {
+      setValidationErrors((prev) => ({
         ...prev,
         [name]: "",
       }));
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     const validation = validateExpense(formData);
     if (!validation.isValid) {
-      setErrors(validation.errors);
+      setValidationErrors(validation.errors);
       return;
     }
 
@@ -54,37 +54,39 @@ const AddExpense = ({ onClose, onSuccess }) => {
         amount: parseFloat(formData.amount),
       };
 
-      addExpense(expenseData);
+      createExpense(expenseData);
       onSuccess();
     } catch (error) {
       console.error("Error adding expense:", error);
-      setErrors({ submit: "Failed to add expense. Please try again." });
+      setValidationErrors({
+        submit: "Failed to add expense. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleClose = () => {
+  const handleModalClose = () => {
     if (!isSubmitting) {
       onClose();
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={handleClose}>
+    <div className="modal-overlay" onClick={handleModalClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Add New Expense</h3>
           <button
             className="modal-close"
-            onClick={handleClose}
+            onClick={handleModalClose}
             disabled={isSubmitting}
           >
             ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="expense-form">
+        <form onSubmit={handleFormSubmit} className="expense-form">
           <div className="form-group">
             <label htmlFor="amount">Amount *</label>
             <input
@@ -96,11 +98,13 @@ const AddExpense = ({ onClose, onSuccess }) => {
               placeholder="0.00"
               step="0.01"
               min="0"
-              className={errors.amount ? "form-input error" : "form-input"}
+              className={
+                validationErrors.amount ? "form-input error" : "form-input"
+              }
               disabled={isSubmitting}
             />
-            {errors.amount && (
-              <span className="error-message">{errors.amount}</span>
+            {validationErrors.amount && (
+              <span className="error-message">{validationErrors.amount}</span>
             )}
           </div>
 
@@ -111,7 +115,9 @@ const AddExpense = ({ onClose, onSuccess }) => {
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className={errors.category ? "form-input error" : "form-input"}
+              className={
+                validationErrors.category ? "form-input error" : "form-input"
+              }
               disabled={isSubmitting}
             >
               <option value="">Select a category</option>
@@ -121,8 +127,8 @@ const AddExpense = ({ onClose, onSuccess }) => {
                 </option>
               ))}
             </select>
-            {errors.category && (
-              <span className="error-message">{errors.category}</span>
+            {validationErrors.category && (
+              <span className="error-message">{validationErrors.category}</span>
             )}
           </div>
 
@@ -137,7 +143,9 @@ const AddExpense = ({ onClose, onSuccess }) => {
                 onChange={handleInputChange}
                 min="2020-01-01"
                 max={maxDateString}
-                className={errors.date ? "form-input error" : "form-input"}
+                className={
+                  validationErrors.date ? "form-input error" : "form-input"
+                }
                 disabled={isSubmitting}
               />
               <span className="date-icon">📅</span>
@@ -146,8 +154,8 @@ const AddExpense = ({ onClose, onSuccess }) => {
               You can select any date from 2020 onwards, up to 1 year in the
               future
             </small>
-            {errors.date && (
-              <span className="error-message">{errors.date}</span>
+            {validationErrors.date && (
+              <span className="error-message">{validationErrors.date}</span>
             )}
           </div>
 
@@ -165,15 +173,17 @@ const AddExpense = ({ onClose, onSuccess }) => {
             />
           </div>
 
-          {errors.submit && (
-            <div className="error-message submit-error">{errors.submit}</div>
+          {validationErrors.submit && (
+            <div className="error-message submit-error">
+              {validationErrors.submit}
+            </div>
           )}
 
           <div className="form-actions">
             <Button
               type="button"
               variant="secondary"
-              onClick={handleClose}
+              onClick={handleModalClose}
               disabled={isSubmitting}
             >
               Cancel
@@ -188,4 +198,4 @@ const AddExpense = ({ onClose, onSuccess }) => {
   );
 };
 
-export default AddExpense;
+export default ExpenseFormModal;

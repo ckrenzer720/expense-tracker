@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { useExpense } from "../../hooks/useExpense";
-import { AddExpenseModal } from "../features/expenses";
+import { ExpenseFormModal } from "../features/expenses";
 import { ROUTES } from "../../constants/routes";
 
 const Sidebar = ({ setCurrentView }) => {
   const { categories, expenses, budgets } = useExpense();
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
 
-  const handleAddExpense = () => {
-    setShowAddModal(true);
+  const handleOpenExpenseModal = () => {
+    setIsModalOpen(true);
   };
 
-  const handleCategoryClick = (categoryId) => {
-    setSelectedCategory(categoryId);
+  const handleCategorySelect = (categoryId) => {
+    setActiveCategory(categoryId);
     setCurrentView(ROUTES.EXPENSES);
   };
 
@@ -21,22 +21,22 @@ const Sidebar = ({ setCurrentView }) => {
     return expenses.filter((expense) => expense.category === categoryId).length;
   };
 
-  const getCategoryTotal = (categoryId) => {
+  const getCategoryTotalSpent = (categoryId) => {
     return expenses
       .filter((expense) => expense.category === categoryId)
       .reduce((total, expense) => total + expense.amount, 0);
   };
 
-  const getTotalBudget = () => {
+  const getTotalBudgetAmount = () => {
     return Object.values(budgets).reduce((sum, budget) => sum + budget, 0);
   };
 
-  const getTotalSpent = () => {
+  const getTotalSpentAmount = () => {
     return expenses.reduce((sum, expense) => sum + expense.amount, 0);
   };
 
-  const getTotalRemaining = () => {
-    return getTotalBudget() - getTotalSpent();
+  const getTotalRemainingAmount = () => {
+    return getTotalBudgetAmount() - getTotalSpentAmount();
   };
 
   return (
@@ -44,7 +44,7 @@ const Sidebar = ({ setCurrentView }) => {
       <aside className="sidebar">
         <div className="sidebar-section">
           <h3>Quick Add</h3>
-          <button className="add-expense-btn" onClick={handleAddExpense}>
+          <button className="add-expense-btn" onClick={handleOpenExpenseModal}>
             + Add Expense
           </button>
         </div>
@@ -56,11 +56,9 @@ const Sidebar = ({ setCurrentView }) => {
               <li
                 key={category.id}
                 className={`category-item ${
-                  selectedCategory === category.id
-                    ? "category-item--active"
-                    : ""
+                  activeCategory === category.id ? "category-item--active" : ""
                 }`}
-                onClick={() => handleCategoryClick(category.id)}
+                onClick={() => handleCategorySelect(category.id)}
               >
                 <span className="category-icon">{category.icon}</span>
                 <span className="category-name">{category.name}</span>
@@ -68,7 +66,7 @@ const Sidebar = ({ setCurrentView }) => {
                   ({getCategoryExpenseCount(category.id)})
                 </span>
                 <span className="category-total">
-                  ${getCategoryTotal(category.id).toFixed(2)}
+                  ${getCategoryTotalSpent(category.id).toFixed(2)}
                 </span>
               </li>
             ))}
@@ -78,18 +76,18 @@ const Sidebar = ({ setCurrentView }) => {
         <div className="sidebar-section">
           <h3>Budget Overview</h3>
           <div className="budget-summary">
-            <p>Monthly Budget: ${getTotalBudget().toFixed(2)}</p>
-            <p>Spent: ${getTotalSpent().toFixed(2)}</p>
-            <p>Remaining: ${getTotalRemaining().toFixed(2)}</p>
+            <p>Monthly Budget: ${getTotalBudgetAmount().toFixed(2)}</p>
+            <p>Spent: ${getTotalSpentAmount().toFixed(2)}</p>
+            <p>Remaining: ${getTotalRemainingAmount().toFixed(2)}</p>
           </div>
         </div>
       </aside>
 
-      {showAddModal && (
-        <AddExpenseModal
-          onClose={() => setShowAddModal(false)}
+      {isModalOpen && (
+        <ExpenseFormModal
+          onClose={() => setIsModalOpen(false)}
           onSuccess={() => {
-            setShowAddModal(false);
+            setIsModalOpen(false);
             setCurrentView(ROUTES.EXPENSES);
           }}
         />

@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useExpense } from "../../../hooks/useExpense";
 import { formatCurrency } from "../../../utils/currency";
 import { Card, Button } from "../../common";
-import AddExpenseModal from "./AddExpenseModal";
+import ExpenseFormModal from "./ExpenseFormModal";
 import { PAGE_TITLES, PAGE_DESCRIPTIONS } from "../../../constants/routes";
 
 const Expenses = () => {
-  const { expenses, categories, deleteExpense } = useExpense();
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [filterCategory, setFilterCategory] = useState("all");
+  const { expenses, categories, removeExpense } = useExpense();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("all");
 
   const getCategoryName = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
@@ -21,13 +21,15 @@ const Expenses = () => {
   };
 
   const filteredExpenses =
-    filterCategory === "all"
+    selectedCategoryFilter === "all"
       ? expenses
-      : expenses.filter((expense) => expense.category === filterCategory);
+      : expenses.filter(
+          (expense) => expense.category === selectedCategoryFilter
+        );
 
   const handleDeleteExpense = (expenseId) => {
     if (window.confirm("Are you sure you want to delete this expense?")) {
-      deleteExpense(expenseId);
+      removeExpense(expenseId);
     }
   };
 
@@ -38,7 +40,7 @@ const Expenses = () => {
           <h2>{PAGE_TITLES.expenses}</h2>
           <p>{PAGE_DESCRIPTIONS.expenses}</p>
         </div>
-        <Button onClick={() => setShowAddModal(true)}>+ Add Expense</Button>
+        <Button onClick={() => setIsModalOpen(true)}>+ Add Expense</Button>
       </div>
 
       <div className="expenses-filters">
@@ -47,8 +49,8 @@ const Expenses = () => {
             <label htmlFor="category-filter">Filter by Category:</label>
             <select
               id="category-filter"
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
+              value={selectedCategoryFilter}
+              onChange={(e) => setSelectedCategoryFilter(e.target.value)}
               className="filter-select"
             >
               <option value="all">All Categories</option>
@@ -67,7 +69,7 @@ const Expenses = () => {
           {filteredExpenses.length === 0 ? (
             <div className="no-expenses">
               <p>No expenses found.</p>
-              <Button onClick={() => setShowAddModal(true)}>
+              <Button onClick={() => setIsModalOpen(true)}>
                 Add Your First Expense
               </Button>
             </div>
@@ -108,10 +110,10 @@ const Expenses = () => {
         </Card>
       </div>
 
-      {showAddModal && (
-        <AddExpenseModal
-          onClose={() => setShowAddModal(false)}
-          onSuccess={() => setShowAddModal(false)}
+      {isModalOpen && (
+        <ExpenseFormModal
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={() => setIsModalOpen(false)}
         />
       )}
     </div>

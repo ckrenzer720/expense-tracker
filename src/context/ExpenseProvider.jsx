@@ -16,36 +16,36 @@ const initialState = {
 
 const expenseReducer = (state, action) => {
   switch (action.type) {
-    case "ADD_EXPENSE":
+    case "EXPENSE_ADD":
       return {
         ...state,
         expenses: [...state.expenses, action.payload],
       };
-    case "UPDATE_EXPENSE":
+    case "EXPENSE_UPDATE":
       return {
         ...state,
         expenses: state.expenses.map((expense) =>
           expense.id === action.payload.id ? action.payload : expense
         ),
       };
-    case "DELETE_EXPENSE":
+    case "EXPENSE_DELETE":
       return {
         ...state,
         expenses: state.expenses.filter(
           (expense) => expense.id !== action.payload
         ),
       };
-    case "SET_EXPENSES":
+    case "EXPENSES_SET":
       return {
         ...state,
         expenses: action.payload,
       };
-    case "SET_BUDGETS":
+    case "BUDGETS_SET":
       return {
         ...state,
         budgets: action.payload,
       };
-    case "UPDATE_BUDGET":
+    case "BUDGET_UPDATE":
       return {
         ...state,
         budgets: {
@@ -53,12 +53,12 @@ const expenseReducer = (state, action) => {
           [action.payload.categoryId]: action.payload.amount,
         },
       };
-    case "SET_LOADING":
+    case "LOADING_SET":
       return {
         ...state,
         loading: action.payload,
       };
-    case "SET_ERROR":
+    case "ERROR_SET":
       return {
         ...state,
         error: action.payload,
@@ -77,10 +77,10 @@ export const ExpenseProvider = ({ children }) => {
     if (savedExpenses) {
       try {
         const expenses = JSON.parse(savedExpenses);
-        dispatch({ type: "SET_EXPENSES", payload: expenses });
+        dispatch({ type: "EXPENSES_SET", payload: expenses });
       } catch (error) {
         console.error("Error loading expenses:", error);
-        dispatch({ type: "SET_ERROR", payload: "Failed to load expenses" });
+        dispatch({ type: "ERROR_SET", payload: "Failed to load expenses" });
       }
     }
   }, []);
@@ -91,7 +91,7 @@ export const ExpenseProvider = ({ children }) => {
     if (savedBudgets) {
       try {
         const budgets = JSON.parse(savedBudgets);
-        dispatch({ type: "SET_BUDGETS", payload: budgets });
+        dispatch({ type: "BUDGETS_SET", payload: budgets });
       } catch (error) {
         console.error("Error loading budgets:", error);
         // Keep default budgets if loading fails
@@ -109,41 +109,41 @@ export const ExpenseProvider = ({ children }) => {
     localStorage.setItem(STORAGE_KEYS.BUDGETS, JSON.stringify(state.budgets));
   }, [state.budgets]);
 
-  const addExpense = (expense) => {
+  const createExpense = (expenseData) => {
     const newExpense = {
-      ...expense,
+      ...expenseData,
       id: Date.now().toString(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    dispatch({ type: "ADD_EXPENSE", payload: newExpense });
+    dispatch({ type: "EXPENSE_ADD", payload: newExpense });
   };
 
-  const updateExpense = (expense) => {
+  const editExpense = (expenseData) => {
     const updatedExpense = {
-      ...expense,
+      ...expenseData,
       updatedAt: new Date().toISOString(),
     };
-    dispatch({ type: "UPDATE_EXPENSE", payload: updatedExpense });
+    dispatch({ type: "EXPENSE_UPDATE", payload: updatedExpense });
   };
 
-  const deleteExpense = (expenseId) => {
-    dispatch({ type: "DELETE_EXPENSE", payload: expenseId });
+  const removeExpense = (expenseId) => {
+    dispatch({ type: "EXPENSE_DELETE", payload: expenseId });
   };
 
-  const updateBudget = (categoryId, amount) => {
+  const setBudget = (categoryId, amount) => {
     dispatch({
-      type: "UPDATE_BUDGET",
+      type: "BUDGET_UPDATE",
       payload: { categoryId, amount: parseFloat(amount) || 0 },
     });
   };
 
   const value = {
     ...state,
-    addExpense,
-    updateExpense,
-    deleteExpense,
-    updateBudget,
+    createExpense,
+    editExpense,
+    removeExpense,
+    setBudget,
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useExpense } from "../../../hooks/useExpense";
 import {
   formatCurrency,
@@ -7,56 +7,43 @@ import {
 import { Card, Button } from "../../common";
 
 const Budgets = () => {
-  const { categories, expenses } = useExpense();
-  const [budgets, setBudgets] = useState({
-    1: 500, // Food & Dining
-    2: 300, // Transportation
-    3: 400, // Shopping
-    4: 200, // Entertainment
-    5: 150, // Utilities
-    6: 100, // Healthcare
-    7: 200, // Education
-    8: 150, // Other
-  });
+  const { categories, expenses, budgets, setBudget } = useExpense();
 
-  const getSpentAmount = (categoryId) => {
+  const getCategorySpentAmount = (categoryId) => {
     return calculateTotalByCategory(expenses, categoryId);
   };
 
-  const getRemainingAmount = (categoryId) => {
+  const getCategoryRemainingAmount = (categoryId) => {
     const budget = budgets[categoryId] || 0;
-    const spent = getSpentAmount(categoryId);
+    const spent = getCategorySpentAmount(categoryId);
     return budget - spent;
   };
 
-  const getProgressPercentage = (categoryId) => {
+  const getCategoryProgressPercentage = (categoryId) => {
     const budget = budgets[categoryId] || 0;
-    const spent = getSpentAmount(categoryId);
+    const spent = getCategorySpentAmount(categoryId);
     return budget > 0 ? (spent / budget) * 100 : 0;
   };
 
-  const getProgressColor = (percentage) => {
+  const getProgressBarColor = (percentage) => {
     if (percentage >= 90) return "var(--danger)";
     if (percentage >= 75) return "var(--warning)";
     return "var(--secondary)";
   };
 
-  const handleBudgetChange = (categoryId, newAmount) => {
-    setBudgets((prev) => ({
-      ...prev,
-      [categoryId]: parseFloat(newAmount) || 0,
-    }));
+  const handleBudgetAmountChange = (categoryId, newAmount) => {
+    setBudget(categoryId, newAmount);
   };
 
-  const totalBudget = Object.values(budgets).reduce(
+  const totalBudgetAmount = Object.values(budgets).reduce(
     (sum, budget) => sum + budget,
     0
   );
-  const totalSpent = categories.reduce(
-    (sum, category) => sum + getSpentAmount(category.id),
+  const totalSpentAmount = categories.reduce(
+    (sum, category) => sum + getCategorySpentAmount(category.id),
     0
   );
-  const totalRemaining = totalBudget - totalSpent;
+  const totalRemainingAmount = totalBudgetAmount - totalSpentAmount;
 
   return (
     <div className="container">
@@ -71,15 +58,21 @@ const Budgets = () => {
         <Card title="Monthly Overview" className="overview-card">
           <div className="overview-stats">
             <div className="overview-stat">
-              <div className="stat-value">{formatCurrency(totalBudget)}</div>
+              <div className="stat-value">
+                {formatCurrency(totalBudgetAmount)}
+              </div>
               <div className="stat-label">Total Budget</div>
             </div>
             <div className="overview-stat">
-              <div className="stat-value">{formatCurrency(totalSpent)}</div>
+              <div className="stat-value">
+                {formatCurrency(totalSpentAmount)}
+              </div>
               <div className="stat-label">Total Spent</div>
             </div>
             <div className="overview-stat">
-              <div className="stat-value">{formatCurrency(totalRemaining)}</div>
+              <div className="stat-value">
+                {formatCurrency(totalRemainingAmount)}
+              </div>
               <div className="stat-label">Remaining</div>
             </div>
           </div>
@@ -90,10 +83,10 @@ const Budgets = () => {
         <Card title="Category Budgets">
           <div className="budget-list">
             {categories.map((category) => {
-              const spent = getSpentAmount(category.id);
-              const remaining = getRemainingAmount(category.id);
-              const percentage = getProgressPercentage(category.id);
-              const progressColor = getProgressColor(percentage);
+              const spent = getCategorySpentAmount(category.id);
+              const remaining = getCategoryRemainingAmount(category.id);
+              const percentage = getCategoryProgressPercentage(category.id);
+              const progressColor = getProgressBarColor(percentage);
 
               return (
                 <div key={category.id} className="budget-item">
@@ -112,7 +105,7 @@ const Budgets = () => {
                         className="budget-input"
                         value={budgets[category.id] || 0}
                         onChange={(e) =>
-                          handleBudgetChange(category.id, e.target.value)
+                          handleBudgetAmountChange(category.id, e.target.value)
                         }
                         min="0"
                         step="0.01"
