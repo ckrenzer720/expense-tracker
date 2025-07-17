@@ -7,6 +7,8 @@ import {
   Expenses,
   Budgets,
   Analytics,
+  ErrorBoundary,
+  ErrorTestComponent,
 } from "./components";
 import { ROUTES } from "./constants/routes";
 import "./index.css";
@@ -29,15 +31,24 @@ function App() {
     }
   };
 
+  const handleGoBack = () => {
+    setCurrentView(ROUTES.DASHBOARD);
+  };
+
   return (
     <ExpenseProvider>
-      <div className="app">
-        <Header currentView={currentView} setCurrentView={setCurrentView} />
-        <div className="main-container">
-          <Sidebar setCurrentView={setCurrentView} />
-          <main className="main">{renderCurrentView()}</main>
+      <ErrorBoundary showDetails={import.meta.env.DEV} onGoBack={handleGoBack}>
+        <div className="app">
+          <Header currentView={currentView} setCurrentView={setCurrentView} />
+          <div className="main-container">
+            <Sidebar setCurrentView={setCurrentView} />
+            <main className="main">{renderCurrentView()}</main>
+          </div>
         </div>
-      </div>
+
+        {/* Hidden developer tool - only appears with Ctrl+Shift+E */}
+        <ErrorTestComponent />
+      </ErrorBoundary>
     </ExpenseProvider>
   );
 }

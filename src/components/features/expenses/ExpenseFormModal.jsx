@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useExpense } from "../../../hooks/useExpense";
 import { validateExpense } from "../../../utils/validation";
+import { getErrorMessage } from "../../../utils/errorHandling";
 import { Button } from "../../common";
 
 const ExpenseFormModal = ({ onClose, onSuccess }) => {
@@ -20,6 +21,7 @@ const ExpenseFormModal = ({ onClose, onSuccess }) => {
   });
   const [validationErrors, setValidationErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,10 +37,19 @@ const ExpenseFormModal = ({ onClose, onSuccess }) => {
         [name]: "",
       }));
     }
+
+    // Clear submit error when user makes changes
+    if (submitError) {
+      setSubmitError("");
+    }
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+    // Clear previous errors
+    setValidationErrors({});
+    setSubmitError("");
 
     const validation = validateExpense(formData);
     if (!validation.isValid) {
@@ -54,13 +65,18 @@ const ExpenseFormModal = ({ onClose, onSuccess }) => {
         amount: parseFloat(formData.amount),
       };
 
-      createExpense(expenseData);
+      await createExpense(expenseData);
       onSuccess();
     } catch (error) {
       console.error("Error adding expense:", error);
-      setValidationErrors({
-        submit: "Failed to add expense. Please try again.",
-      });
+
+      // Get user-friendly error message
+      const errorMessage = getErrorMessage(
+        error,
+        "Failed to add expense. Please try again."
+      );
+
+      setSubmitError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -173,10 +189,8 @@ const ExpenseFormModal = ({ onClose, onSuccess }) => {
             />
           </div>
 
-          {validationErrors.submit && (
-            <div className="error-message submit-error">
-              {validationErrors.submit}
-            </div>
+          {submitError && (
+            <div className="error-message submit-error">{submitError}</div>
           )}
 
           <div className="form-actions">
