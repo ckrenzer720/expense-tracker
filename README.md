@@ -239,3 +239,14 @@ Week 5: Testing
 Days 1-3: Set up testing framework and write tests
 Days 4-5: Add production optimizations
 Days 6-7: Final polish and documentation -->
+
+{
+"Version": "2012-10-17",
+"Statement": [
+{
+"Effect": "Allow",
+"Action": "*",
+"Resource": "*"
+}
+]
+}

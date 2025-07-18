@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useExpense } from "../../../hooks/useExpense";
 import { validateExpense } from "../../../utils/validation";
 import { getErrorMessage } from "../../../utils/errorHandling";
-import { Button } from "../../common";
+import { Button, LoadingSpinner } from "../../common";
 
 const ExpenseFormModal = ({ onClose, onSuccess }) => {
   const { categories, createExpense } = useExpense();
@@ -203,7 +203,14 @@ const ExpenseFormModal = ({ onClose, onSuccess }) => {
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Adding..." : "Add Expense"}
+              {isSubmitting ? (
+                <div className="flex items-center gap-2">
+                  <LoadingSpinner size="small" color="primary" text="" />
+                  Adding...
+                </div>
+              ) : (
+                "Add Expense"
+              )}
             </Button>
           </div>
         </form>
