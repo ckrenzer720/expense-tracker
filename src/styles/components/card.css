@@ -1,0 +1,78 @@
+/* Card Component Styles */
+.card {
+  padding: var(--spacing-xl);
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Card Variants */
+.card--padding-small {
+  padding: var(--spacing-md);
+}
+
+.card--padding-medium {
+  padding: var(--spacing-lg);
+}
+
+.card--padding-large {
+  padding: var(--spacing-xl);
+}
+
+/* Card with title */
+.card-title {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Card content */
+.card-content {
+  color: var(--text-secondary);
+}
+
+/* Card header */
+.card-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Card footer */
+.card-footer {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border);
+}
+
+/* Interactive card */
+.card--interactive {
+  cursor: pointer;
+}
+
+.card--interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Card with accent border */
+.card--accent {
+  border-left: 4px solid var(--primary);
+}
+
+.card--accent-success {
+  border-left: 4px solid var(--secondary);
+}
+
+.card--accent-warning {
+  border-left: 4px solid var(--warning);
+}
+
+.card--accent-danger {
+  border-left: 4px solid var(--danger);
+} 

@@ -217,7 +217,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Week 1: Foundation
 Days 1-2: Restructure project and fix naming √
 
-Days 3-4: Add error boundaries and loading states
+Days 3-4: Add error boundaries and loading states √
 Days 5-7: Modularize CSS and persist budget data
 
 Week 2: Tooling

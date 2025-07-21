@@ -11,7 +11,6 @@ import {
   ErrorTestComponent,
 } from "./components";
 import { ROUTES } from "./constants/routes";
-import "./index.css";
 
 function App() {
   const [currentView, setCurrentView] = useState(ROUTES.DASHBOARD);

@@ -1,0 +1,30 @@
+/* Main CSS Entry Point - Modular CSS Architecture */
+
+/* 1. Base Styles */
+@import './base/variables.css';
+@import './base/reset.css';
+
+/* 2. Layout Styles */
+@import './layout/app.css';
+@import './layout/header.css';
+@import './layout/sidebar.css';
+
+/* 3. Component Styles */
+@import './components/button.css';
+@import './components/card.css';
+@import './components/form.css';
+@import './components/modal.css';
+@import './components/loading.css';
+@import './components/error.css';
+
+/* 4. Page Styles */
+@import './pages/dashboard.css';
+@import './pages/expenses.css';
+@import './pages/budgets.css';
+@import './pages/analytics.css';
+
+/* 5. Utility Classes */
+@import './utilities/utilities.css';
+
+/* 6. Responsive Design */
+@import './responsive/responsive.css'; 

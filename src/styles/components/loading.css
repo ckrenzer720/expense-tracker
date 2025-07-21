@@ -1,0 +1,143 @@
+/* Loading States and Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Loading Spinner Component */
+.loading-spinner {
+  display: inline-block;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  animation: spin 1s linear infinite;
+}
+
+/* Loading Skeleton Component */
+.skeleton-container {
+  width: 100%;
+}
+
+.skeleton-container > div {
+  margin-bottom: var(--spacing-md);
+}
+
+.skeleton-container > div:last-child {
+  margin-bottom: 0;
+}
+
+.skeleton-item {
+  background-color: #d1d5db;
+  border-radius: var(--radius-sm);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Skeleton variants */
+.skeleton--text {
+  height: 1rem;
+  width: 100%;
+}
+
+.skeleton--text-short {
+  height: 1rem;
+  width: 60%;
+}
+
+.skeleton--text-medium {
+  height: 1rem;
+  width: 80%;
+}
+
+.skeleton--avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.skeleton--button {
+  height: 2.5rem;
+  width: 6rem;
+}
+
+.skeleton--card {
+  height: 8rem;
+  width: 100%;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.loading-overlay--dark {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Loading text */
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: var(--spacing-sm);
+}
+
+/* Loading states for buttons */
+.button--loading {
+  position: relative;
+  color: transparent;
+}
+
+.button--loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Dark mode support for loading states */
+@media (prefers-color-scheme: dark) {
+  .skeleton-item {
+    background-color: #4b5563;
+  }
+  
+  .loading-overlay {
+    background: rgba(0, 0, 0, 0.8);
+  }
+} 

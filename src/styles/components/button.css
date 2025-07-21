@@ -1,0 +1,105 @@
+/* Button Component Styles */
+.button {
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Button Variants */
+.button--primary {
+  background: var(--primary);
+  color: white;
+}
+
+.button--primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.button--secondary {
+  background: var(--secondary);
+  color: white;
+}
+
+.button--secondary:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.button--danger {
+  background: var(--danger);
+  color: white;
+}
+
+.button--danger:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.button--warning {
+  background: var(--warning);
+  color: white;
+}
+
+.button--warning:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
+/* Button Sizes */
+.button--small {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.875rem;
+}
+
+.button--medium {
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+}
+
+.button--large {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 1.125rem;
+}
+
+/* Button States */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button:focus,
+.button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Button with loading state */
+.button--loading {
+  position: relative;
+  color: transparent;
+}
+
+.button--loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+} 

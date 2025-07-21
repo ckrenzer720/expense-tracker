@@ -1,0 +1,35 @@
+/* Main App Layout */
+.app {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Main Content Area */
+.main {
+  flex: 1;
+  padding: var(--spacing-xl);
+  background: var(--background);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+  
+  .main {
+    padding: var(--spacing-lg);
+  }
+} 
