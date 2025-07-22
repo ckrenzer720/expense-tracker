@@ -10,7 +10,7 @@ export const EXPENSE_CATEGORIES = [
   { id: "8", name: "Other", color: "#6B7280", icon: "📝" },
 ];
 
-// Default Budgets
+// Default Budgets (legacy format for migration)
 export const DEFAULT_BUDGETS = {
   1: 500, // Food & Dining
   2: 300, // Transportation
@@ -22,10 +22,26 @@ export const DEFAULT_BUDGETS = {
   8: 150, // Other
 };
 
+// New Budget Structure - Monthly Budgets
+export const createDefaultMonthlyBudgets = (month = null) => {
+  const currentMonth = month || new Date().toISOString().slice(0, 7); // YYYY-MM format
+
+  return EXPENSE_CATEGORIES.map((category) => ({
+    id: `${category.id}-${currentMonth}`,
+    categoryId: category.id,
+    amount: DEFAULT_BUDGETS[category.id] || 0,
+    month: currentMonth,
+    rollover: false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }));
+};
+
 // Local Storage Keys
 export const STORAGE_KEYS = {
   EXPENSES: "expenses",
   BUDGETS: "budgets",
+  BUDGETS_V2: "budgets_v2", // New budget storage key
   SETTINGS: "settings",
 };
 
@@ -34,4 +50,6 @@ export const APP_SETTINGS = {
   CURRENCY: "USD",
   DATE_FORMAT: "YYYY-MM-DD",
   DEFAULT_MONTHLY_BUDGET: 2000,
+  BUDGET_ROLLOVER_ENABLED: true,
+  BUDGET_ALERT_THRESHOLD: 0.8, // 80% of budget
 };

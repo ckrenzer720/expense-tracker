@@ -28,6 +28,35 @@
  * @property {number} amount - Budget amount in dollars
  * @property {string} month - Month in YYYY-MM format
  * @property {boolean} rollover - Whether unused budget rolls over to next month
+ * @property {string} createdAt - ISO timestamp when budget was created
+ * @property {string} updatedAt - ISO timestamp when budget was last updated
+ */
+
+/**
+ * @typedef {Object} BudgetRollover
+ * @property {string} categoryId - Category ID for the rollover
+ * @property {number} amount - Amount rolling over from previous month
+ * @property {string} fromMonth - Month the rollover is from (YYYY-MM format)
+ * @property {string} toMonth - Month the rollover is to (YYYY-MM format)
+ */
+
+/**
+ * @typedef {Object} MonthlyBudgetSummary
+ * @property {string} month - Month in YYYY-MM format
+ * @property {number} totalBudget - Total budget amount for the month
+ * @property {number} totalSpent - Total amount spent in the month
+ * @property {number} totalRemaining - Total remaining budget
+ * @property {number} rolloverAmount - Total amount rolled over from previous month
+ * @property {Array<Budget>} budgets - Array of individual category budgets
+ */
+
+/**
+ * @typedef {Object} BudgetAlert
+ * @property {string} categoryId - Category ID for the alert
+ * @property {string} type - Alert type ('warning', 'danger', 'info')
+ * @property {string} message - Alert message
+ * @property {number} percentage - Percentage of budget used
+ * @property {boolean} isOverBudget - Whether budget is exceeded
  */
 
 /**
@@ -75,7 +104,6 @@
  * @property {number} budget - Budget amount for category
  * @property {number} remaining - Remaining budget
  * @property {number} percentage - Percentage of budget used
- * @property {string} color - Progress bar color based on usage
  */
 
 // Export types for use in JSDoc comments
@@ -83,6 +111,9 @@ export const TYPES = {
   Expense: "Expense",
   Category: "Category",
   Budget: "Budget",
+  BudgetRollover: "BudgetRollover",
+  MonthlyBudgetSummary: "MonthlyBudgetSummary",
+  BudgetAlert: "BudgetAlert",
   AppSettings: "AppSettings",
   ExpenseFormData: "ExpenseFormData",
   ValidationError: "ValidationError",

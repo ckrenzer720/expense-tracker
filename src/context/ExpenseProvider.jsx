@@ -10,11 +10,21 @@ import {
   validateData,
   attemptRecovery,
 } from "../utils/errorHandling";
+import {
+  loadBudgetsFromStorage,
+  saveBudgetsToStorage,
+  createBudgetsForMonth,
+  getCurrentMonth,
+  getBudgetForCategory,
+  getBudgetsForMonth,
+  getTotalBudgetForMonth,
+} from "../utils/budget";
 
 const initialState = {
   expenses: [],
   categories: EXPENSE_CATEGORIES,
-  budgets: DEFAULT_BUDGETS,
+  budgets: [], // Changed from object to array
+  currentMonth: getCurrentMonth(),
   loading: false,
   error: null,
 };
@@ -53,10 +63,19 @@ const expenseReducer = (state, action) => {
     case "BUDGET_UPDATE":
       return {
         ...state,
-        budgets: {
-          ...state.budgets,
-          [action.payload.categoryId]: action.payload.amount,
-        },
+        budgets: state.budgets.map((budget) =>
+          budget.id === action.payload.id ? action.payload : budget
+        ),
+      };
+    case "BUDGET_ADD":
+      return {
+        ...state,
+        budgets: [...state.budgets, action.payload],
+      };
+    case "CURRENT_MONTH_SET":
+      return {
+        ...state,
+        currentMonth: action.payload,
       };
     case "LOADING_SET":
       return {
@@ -126,27 +145,28 @@ export const ExpenseProvider = ({ children }) => {
   useEffect(() => {
     const loadBudgets = () => {
       try {
-        const savedBudgets = localStorage.getItem(STORAGE_KEYS.BUDGETS);
-        if (savedBudgets) {
-          const parsedBudgets = JSON.parse(savedBudgets);
-          const validation = validateData(parsedBudgets, "budget");
+        // Use the new budget loading utility with migration support
+        const loadedBudgets = loadBudgetsFromStorage();
 
-          if (validation.isValid) {
-            dispatch({ type: "BUDGETS_SET", payload: validation.data });
-          } else {
-            logError(new Error(`Invalid budget data: ${validation.error}`), {
-              component: "ExpenseProvider",
-              action: "loadBudgets",
-            });
-            // Keep default budgets if validation fails
-          }
-        }
+        // Ensure we have budgets for the current month
+        const currentMonth = getCurrentMonth();
+        const updatedBudgets = createBudgetsForMonth(
+          loadedBudgets,
+          currentMonth,
+          true, // Enable rollover
+          state.expenses
+        );
+
+        dispatch({ type: "BUDGETS_SET", payload: updatedBudgets });
       } catch (error) {
         logError(error, {
           component: "ExpenseProvider",
           action: "loadBudgets",
         });
-        // Keep default budgets if loading fails
+
+        // Create default budgets if loading fails
+        const defaultBudgets = createBudgetsForMonth([], getCurrentMonth());
+        dispatch({ type: "BUDGETS_SET", payload: defaultBudgets });
       }
     };
 
@@ -184,10 +204,8 @@ export const ExpenseProvider = ({ children }) => {
   useEffect(() => {
     const saveBudgets = () => {
       try {
-        localStorage.setItem(
-          STORAGE_KEYS.BUDGETS,
-          JSON.stringify(state.budgets)
-        );
+        // Use the new budget saving utility
+        saveBudgetsToStorage(state.budgets);
       } catch (error) {
         logError(error, {
           component: "ExpenseProvider",
@@ -199,7 +217,9 @@ export const ExpenseProvider = ({ children }) => {
       }
     };
 
-    saveBudgets();
+    if (state.budgets.length > 0) {
+      saveBudgets();
+    }
   }, [state.budgets]);
 
   const createExpense = (expenseData) => {
@@ -267,25 +287,130 @@ export const ExpenseProvider = ({ children }) => {
     }
   };
 
-  const setBudget = (categoryId, amount) => {
+  const setBudget = (categoryId, amount, month = null) => {
     try {
       const numericAmount = parseFloat(amount);
       if (isNaN(numericAmount) || numericAmount < 0) {
         throw new Error("Invalid budget amount");
       }
 
-      dispatch({
-        type: "BUDGET_UPDATE",
-        payload: { categoryId, amount: numericAmount },
-      });
+      const targetMonth = month || state.currentMonth;
+
+      // Find existing budget for this category and month
+      const existingBudget = getBudgetForCategory(
+        state.budgets,
+        categoryId,
+        targetMonth
+      );
+
+      if (existingBudget) {
+        // Update existing budget
+        const updatedBudget = {
+          ...existingBudget,
+          amount: numericAmount,
+          updatedAt: new Date().toISOString(),
+        };
+
+        dispatch({
+          type: "BUDGET_UPDATE",
+          payload: updatedBudget,
+        });
+      } else {
+        // Create new budget
+        const newBudget = {
+          id: `${categoryId}-${targetMonth}`,
+          categoryId,
+          amount: numericAmount,
+          month: targetMonth,
+          rollover: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+
+        dispatch({
+          type: "BUDGET_ADD",
+          payload: newBudget,
+        });
+      }
     } catch (error) {
       logError(error, {
         component: "ExpenseProvider",
         action: "setBudget",
-        data: { categoryId, amount },
+        data: { categoryId, amount, month },
       });
       throw error;
     }
+  };
+
+  const setBudgetRollover = (categoryId, rollover, month = null) => {
+    try {
+      const targetMonth = month || state.currentMonth;
+      const existingBudget = getBudgetForCategory(
+        state.budgets,
+        categoryId,
+        targetMonth
+      );
+
+      if (existingBudget) {
+        const updatedBudget = {
+          ...existingBudget,
+          rollover: Boolean(rollover),
+          updatedAt: new Date().toISOString(),
+        };
+
+        dispatch({
+          type: "BUDGET_UPDATE",
+          payload: updatedBudget,
+        });
+      }
+    } catch (error) {
+      logError(error, {
+        component: "ExpenseProvider",
+        action: "setBudgetRollover",
+        data: { categoryId, rollover, month },
+      });
+      throw error;
+    }
+  };
+
+  const setCurrentMonth = (month) => {
+    try {
+      dispatch({ type: "CURRENT_MONTH_SET", payload: month });
+
+      // Ensure budgets exist for the new month
+      const updatedBudgets = createBudgetsForMonth(
+        state.budgets,
+        month,
+        true, // Enable rollover
+        state.expenses
+      );
+
+      if (updatedBudgets.length !== state.budgets.length) {
+        dispatch({ type: "BUDGETS_SET", payload: updatedBudgets });
+      }
+    } catch (error) {
+      logError(error, {
+        component: "ExpenseProvider",
+        action: "setCurrentMonth",
+        data: { month },
+      });
+      throw error;
+    }
+  };
+
+  const getBudgetForCategoryHelper = (categoryId, month = null) => {
+    const targetMonth = month || state.currentMonth;
+    return getBudgetForCategory(state.budgets, categoryId, targetMonth);
+  };
+
+  const getBudgetsForMonthHelper = (month = null) => {
+    const targetMonth = month || state.currentMonth;
+    return getBudgetsForMonth(state.budgets, targetMonth);
+  };
+
+  const getTotalBudgetForMonthHelper = (month = null) => {
+    const targetMonth = month || state.currentMonth;
+    return getTotalBudgetForMonth(state.budgets, targetMonth);
   };
 
   const value = {
@@ -294,6 +419,11 @@ export const ExpenseProvider = ({ children }) => {
     editExpense,
     removeExpense,
     setBudget,
+    setBudgetRollover,
+    setCurrentMonth,
+    getBudgetForCategory: getBudgetForCategoryHelper,
+    getBudgetsForMonth: getBudgetsForMonthHelper,
+    getTotalBudgetForMonth: getTotalBudgetForMonthHelper,
   };
 
   return (

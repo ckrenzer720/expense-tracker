@@ -121,17 +121,70 @@ export const validateData = (data, dataType) => {
       }
 
       case "budget": {
-        if (!data || typeof data !== "object") {
-          throw new Error("Invalid budget data");
+        // Handle legacy budget format (object with categoryId: amount)
+        if (data && typeof data === "object" && !Array.isArray(data)) {
+          const sanitizedBudget = {};
+          Object.keys(data).forEach((key) => {
+            const value = parseFloat(data[key]);
+            sanitizedBudget[key] = isNaN(value) ? 0 : Math.max(0, value);
+          });
+          return { isValid: true, data: sanitizedBudget };
         }
 
-        const sanitizedBudget = {};
-        Object.keys(data).forEach((key) => {
-          const value = parseFloat(data[key]);
-          sanitizedBudget[key] = isNaN(value) ? 0 : Math.max(0, value);
+        // Handle new budget format (array of budget objects)
+        if (Array.isArray(data)) {
+          const sanitizedBudgets = data.map((budget) => {
+            if (!budget || typeof budget !== "object") {
+              throw new Error("Invalid budget object in array");
+            }
+
+            return {
+              id:
+                budget.id ||
+                `${budget.categoryId}-${
+                  budget.month || new Date().toISOString().slice(0, 7)
+                }`,
+              categoryId: budget.categoryId || "",
+              amount: parseFloat(budget.amount) || 0,
+              month: budget.month || new Date().toISOString().slice(0, 7),
+              rollover: Boolean(budget.rollover),
+              createdAt: budget.createdAt || new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+          });
+
+          return { isValid: true, data: sanitizedBudgets };
+        }
+
+        throw new Error("Invalid budget data format");
+      }
+
+      case "budgetArray": {
+        if (!Array.isArray(data)) {
+          throw new Error("Budget data must be an array");
+        }
+
+        const sanitizedBudgets = data.map((budget) => {
+          if (!budget || typeof budget !== "object") {
+            throw new Error("Invalid budget object in array");
+          }
+
+          return {
+            id:
+              budget.id ||
+              `${budget.categoryId}-${
+                budget.month || new Date().toISOString().slice(0, 7)
+              }`,
+            categoryId: budget.categoryId || "",
+            amount: parseFloat(budget.amount) || 0,
+            month: budget.month || new Date().toISOString().slice(0, 7),
+            rollover: Boolean(budget.rollover),
+            createdAt: budget.createdAt || new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
         });
 
-        return { isValid: true, data: sanitizedBudget };
+        return { isValid: true, data: sanitizedBudgets };
       }
 
       default:
