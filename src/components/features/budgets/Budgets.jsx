@@ -1,49 +1,190 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { useExpense } from "../../../hooks/useExpense";
 import {
   formatCurrency,
   calculateTotalByCategory,
+  getCurrentMonthExpenses,
 } from "../../../utils/currency";
-import { Card, Button } from "../../common";
+import {
+  getPreviousMonth,
+  getNextMonth,
+  formatMonth,
+} from "../../../utils/budget";
+import { Card, Button, LoadingSkeleton } from "../../common";
 
 const Budgets = () => {
-  const { categories, expenses, budgets, setBudget } = useExpense();
+  const {
+    categories,
+    expenses,
+    currentMonth,
+    setBudget,
+    setBudgetRollover,
+    setCurrentMonth,
+    getBudgetForCategory,
+    getTotalBudgetForMonth,
+    loading,
+  } = useExpense();
 
-  const getCategorySpentAmount = (categoryId) => {
-    return calculateTotalByCategory(expenses, categoryId);
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [showTemplates, setShowTemplates] = useState(false);
+
+  // Get current month expenses for budget tracking
+  const currentMonthExpenses = useMemo(() => {
+    return getCurrentMonthExpenses(expenses, selectedMonth);
+  }, [expenses, selectedMonth]);
+
+  // Calculate budget statistics
+  const budgetStats = useMemo(() => {
+    const totalBudget = getTotalBudgetForMonth(selectedMonth);
+    const totalSpent = currentMonthExpenses.reduce(
+      (sum, expense) => sum + expense.amount,
+      0
+    );
+    const totalRemaining = totalBudget - totalSpent;
+    const percentageUsed =
+      totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
+
+    return {
+      totalBudget,
+      totalSpent,
+      totalRemaining,
+      percentageUsed,
+    };
+  }, [currentMonthExpenses, selectedMonth, getTotalBudgetForMonth]);
+
+  // Get category budget data
+  const getCategoryBudgetData = (categoryId) => {
+    const budget = getBudgetForCategory(categoryId, selectedMonth);
+    const spent = calculateTotalByCategory(currentMonthExpenses, categoryId);
+    const budgetAmount = budget?.amount || 0;
+    const remaining = budgetAmount - spent;
+    const percentage = budgetAmount > 0 ? (spent / budgetAmount) * 100 : 0;
+
+    return {
+      budget,
+      spent,
+      remaining,
+      percentage,
+      isOverBudget: remaining < 0,
+      isNearLimit: percentage >= 80 && percentage < 100,
+      isAtLimit: percentage >= 100,
+    };
   };
 
-  const getCategoryRemainingAmount = (categoryId) => {
-    const budget = budgets[categoryId] || 0;
-    const spent = getCategorySpentAmount(categoryId);
-    return budget - spent;
-  };
-
-  const getCategoryProgressPercentage = (categoryId) => {
-    const budget = budgets[categoryId] || 0;
-    const spent = getCategorySpentAmount(categoryId);
-    return budget > 0 ? (spent / budget) * 100 : 0;
-  };
-
-  const getProgressBarColor = (percentage) => {
+  // Get progress bar color based on usage
+  const getProgressBarColor = (percentage, isOverBudget) => {
+    if (isOverBudget) return "var(--danger)";
     if (percentage >= 90) return "var(--danger)";
     if (percentage >= 75) return "var(--warning)";
     return "var(--secondary)";
   };
 
-  const handleBudgetAmountChange = (categoryId, newAmount) => {
-    setBudget(categoryId, newAmount);
+  // Budget templates
+  const budgetTemplates = [
+    {
+      name: "Conservative",
+      description: "Tight budget for saving money",
+      budgets: {
+        1: 300, // Food & Dining
+        2: 200, // Transportation
+        3: 250, // Shopping
+        4: 150, // Entertainment
+        5: 120, // Utilities
+        6: 80, // Healthcare
+        7: 150, // Education
+        8: 100, // Other
+      },
+    },
+    {
+      name: "Balanced",
+      description: "Moderate spending with room for fun",
+      budgets: {
+        1: 500, // Food & Dining
+        2: 300, // Transportation
+        3: 400, // Shopping
+        4: 200, // Entertainment
+        5: 150, // Utilities
+        6: 100, // Healthcare
+        7: 200, // Education
+        8: 150, // Other
+      },
+    },
+    {
+      name: "Luxury",
+      description: "Comfortable lifestyle with premium spending",
+      budgets: {
+        1: 800, // Food & Dining
+        2: 500, // Transportation
+        3: 600, // Shopping
+        4: 400, // Entertainment
+        5: 200, // Utilities
+        6: 150, // Healthcare
+        7: 300, // Education
+        8: 250, // Other
+      },
+    },
+  ];
+
+  // Apply budget template
+  const applyBudgetTemplate = (template) => {
+    Object.entries(template.budgets).forEach(([categoryId, amount]) => {
+      setBudget(categoryId, amount, selectedMonth);
+    });
+    setShowTemplates(false);
   };
 
-  const totalBudgetAmount = Object.values(budgets).reduce(
-    (sum, budget) => sum + budget,
-    0
-  );
-  const totalSpentAmount = categories.reduce(
-    (sum, category) => sum + getCategorySpentAmount(category.id),
-    0
-  );
-  const totalRemainingAmount = totalBudgetAmount - totalSpentAmount;
+  // Handle month change
+  const handleMonthChange = (newMonth) => {
+    setSelectedMonth(newMonth);
+    setCurrentMonth(newMonth);
+  };
+
+  // Handle budget amount change
+  const handleBudgetAmountChange = (categoryId, newAmount) => {
+    setBudget(categoryId, newAmount, selectedMonth);
+  };
+
+  // Handle rollover toggle
+  const handleRolloverToggle = (categoryId, rollover) => {
+    setBudgetRollover(categoryId, rollover, selectedMonth);
+  };
+
+  // Generate month options (current month + 6 months back and forward)
+  const generateMonthOptions = () => {
+    const options = [];
+    const current = new Date(selectedMonth + "-01");
+
+    // Add 6 months back
+    for (let i = 6; i > 0; i--) {
+      const date = new Date(current);
+      date.setMonth(date.getMonth() - i);
+      options.push(date.toISOString().slice(0, 7));
+    }
+
+    // Add current month
+    options.push(selectedMonth);
+
+    // Add 6 months forward
+    for (let i = 1; i <= 6; i++) {
+      const date = new Date(current);
+      date.setMonth(date.getMonth() + i);
+      options.push(date.toISOString().slice(0, 7));
+    }
+
+    return options;
+  };
+
+  if (loading) {
+    return (
+      <div className="container">
+        <div className="budgets-header">
+          <h2>Budgets</h2>
+          <p>Loading budget data...</p>
+        </div>
+        <LoadingSkeleton type="card" count={3} />
+      </div>
+    );
+  }
 
   return (
     <div className="container">
@@ -52,41 +193,153 @@ const Budgets = () => {
           <h2>Budgets</h2>
           <p>Set and track your monthly spending limits</p>
         </div>
+        <div className="budgets-actions">
+          <Button
+            variant="secondary"
+            onClick={() => setShowTemplates(!showTemplates)}
+          >
+            {showTemplates ? "Hide" : "Show"} Templates
+          </Button>
+        </div>
       </div>
 
+      {/* Month Selector */}
+      <div className="month-selector">
+        <Card title="Select Month">
+          <div className="month-navigation">
+            <Button
+              variant="outline"
+              onClick={() => handleMonthChange(getPreviousMonth(selectedMonth))}
+            >
+              ← Previous
+            </Button>
+            <select
+              value={selectedMonth}
+              onChange={(e) => handleMonthChange(e.target.value)}
+              className="month-select"
+            >
+              {generateMonthOptions().map((month) => (
+                <option key={month} value={month}>
+                  {formatMonth(month)}
+                </option>
+              ))}
+            </select>
+            <Button
+              variant="outline"
+              onClick={() => handleMonthChange(getNextMonth(selectedMonth))}
+            >
+              Next →
+            </Button>
+          </div>
+        </Card>
+      </div>
+
+      {/* Budget Templates */}
+      {showTemplates && (
+        <div className="budget-templates">
+          <Card title="Budget Templates">
+            <div className="template-grid">
+              {budgetTemplates.map((template) => (
+                <div key={template.name} className="template-card">
+                  <h4>{template.name}</h4>
+                  <p>{template.description}</p>
+                  <div className="template-total">
+                    Total:{" "}
+                    {formatCurrency(
+                      Object.values(template.budgets).reduce(
+                        (sum, amount) => sum + amount,
+                        0
+                      )
+                    )}
+                  </div>
+                  <Button
+                    variant="primary"
+                    onClick={() => applyBudgetTemplate(template)}
+                  >
+                    Apply Template
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Monthly Overview */}
       <div className="budgets-overview">
-        <Card title="Monthly Overview" className="overview-card">
+        <Card
+          title={`${formatMonth(selectedMonth)} Overview`}
+          className="overview-card"
+        >
           <div className="overview-stats">
             <div className="overview-stat">
               <div className="stat-value">
-                {formatCurrency(totalBudgetAmount)}
+                {formatCurrency(budgetStats.totalBudget)}
               </div>
               <div className="stat-label">Total Budget</div>
             </div>
             <div className="overview-stat">
               <div className="stat-value">
-                {formatCurrency(totalSpentAmount)}
+                {formatCurrency(budgetStats.totalSpent)}
               </div>
               <div className="stat-label">Total Spent</div>
             </div>
             <div className="overview-stat">
-              <div className="stat-value">
-                {formatCurrency(totalRemainingAmount)}
+              <div
+                className={`stat-value ${
+                  budgetStats.totalRemaining < 0 ? "over-budget" : ""
+                }`}
+              >
+                {formatCurrency(budgetStats.totalRemaining)}
               </div>
-              <div className="stat-label">Remaining</div>
+              <div className="stat-label">
+                {budgetStats.totalRemaining >= 0 ? "Remaining" : "Over Budget"}
+              </div>
+            </div>
+            <div className="overview-stat">
+              <div
+                className={`stat-value ${
+                  budgetStats.percentageUsed >= 100
+                    ? "over-budget"
+                    : budgetStats.percentageUsed >= 80
+                    ? "warning"
+                    : ""
+                }`}
+              >
+                {budgetStats.percentageUsed.toFixed(1)}%
+              </div>
+              <div className="stat-label">Used</div>
+            </div>
+          </div>
+
+          {/* Overall Progress Bar */}
+          <div className="overall-progress">
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${Math.min(budgetStats.percentageUsed, 100)}%`,
+                  backgroundColor: getProgressBarColor(
+                    budgetStats.percentageUsed,
+                    budgetStats.totalRemaining < 0
+                  ),
+                }}
+              ></div>
             </div>
           </div>
         </Card>
       </div>
 
+      {/* Category Budgets */}
       <div className="budgets-content">
         <Card title="Category Budgets">
           <div className="budget-list">
             {categories.map((category) => {
-              const spent = getCategorySpentAmount(category.id);
-              const remaining = getCategoryRemainingAmount(category.id);
-              const percentage = getCategoryProgressPercentage(category.id);
-              const progressColor = getProgressBarColor(percentage);
+              const budgetData = getCategoryBudgetData(category.id);
+              const progressColor = getProgressBarColor(
+                budgetData.percentage,
+                budgetData.isOverBudget
+              );
 
               return (
                 <div key={category.id} className="budget-item">
@@ -94,16 +347,29 @@ const Budgets = () => {
                     <div className="budget-category">
                       <span className="budget-icon">{category.icon}</span>
                       <span className="budget-name">{category.name}</span>
+
+                      {/* Budget Alerts */}
+                      {budgetData.isAtLimit && (
+                        <span className="budget-alert budget-alert--danger">
+                          ⚠️ Over Budget
+                        </span>
+                      )}
+                      {budgetData.isNearLimit && !budgetData.isOverBudget && (
+                        <span className="budget-alert budget-alert--warning">
+                          ⚠️ Near Limit
+                        </span>
+                      )}
                     </div>
+
                     <div className="budget-amounts">
                       <span className="budget-spent">
-                        {formatCurrency(spent)}
+                        {formatCurrency(budgetData.spent)}
                       </span>
                       <span className="budget-separator">/</span>
                       <input
                         type="number"
                         className="budget-input"
-                        value={budgets[category.id] || 0}
+                        value={budgetData.budget?.amount || 0}
                         onChange={(e) =>
                           handleBudgetAmountChange(category.id, e.target.value)
                         }
@@ -118,26 +384,44 @@ const Budgets = () => {
                       <div
                         className="progress-fill"
                         style={{
-                          width: `${Math.min(percentage, 100)}%`,
+                          width: `${Math.min(budgetData.percentage, 100)}%`,
                           backgroundColor: progressColor,
                         }}
                       ></div>
                     </div>
                     <div className="progress-text">
-                      {percentage.toFixed(1)}% used
+                      {budgetData.percentage.toFixed(1)}% used
                     </div>
                   </div>
 
-                  <div className="budget-remaining">
-                    <span
-                      className={`remaining-amount ${
-                        remaining < 0 ? "over-budget" : ""
-                      }`}
-                    >
-                      {remaining >= 0
-                        ? `${formatCurrency(remaining)} remaining`
-                        : `${formatCurrency(Math.abs(remaining))} over budget`}
-                    </span>
+                  <div className="budget-footer">
+                    <div className="budget-remaining">
+                      <span
+                        className={`remaining-amount ${
+                          budgetData.isOverBudget ? "over-budget" : ""
+                        }`}
+                      >
+                        {budgetData.remaining >= 0
+                          ? `${formatCurrency(budgetData.remaining)} remaining`
+                          : `${formatCurrency(
+                              Math.abs(budgetData.remaining)
+                            )} over budget`}
+                      </span>
+                    </div>
+
+                    {/* Rollover Toggle */}
+                    <div className="budget-rollover">
+                      <label className="rollover-toggle">
+                        <input
+                          type="checkbox"
+                          checked={budgetData.budget?.rollover || false}
+                          onChange={(e) =>
+                            handleRolloverToggle(category.id, e.target.checked)
+                          }
+                        />
+                        <span className="rollover-label">Rollover</span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               );

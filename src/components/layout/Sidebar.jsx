@@ -4,7 +4,8 @@ import { ExpenseFormModal } from "../features/expenses";
 import { ROUTES } from "../../constants/routes";
 
 const Sidebar = ({ setCurrentView }) => {
-  const { categories, expenses, budgets } = useExpense();
+  const { categories, expenses, currentMonth, getTotalBudgetForMonth } =
+    useExpense();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
 
@@ -28,7 +29,7 @@ const Sidebar = ({ setCurrentView }) => {
   };
 
   const getTotalBudgetAmount = () => {
-    return Object.values(budgets).reduce((sum, budget) => sum + budget, 0);
+    return getTotalBudgetForMonth(currentMonth);
   };
 
   const getTotalSpentAmount = () => {

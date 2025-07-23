@@ -19,6 +19,73 @@
   font-size: 1rem;
 }
 
+.budgets-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+/* Month Selector */
+.month-selector {
+  margin-bottom: var(--spacing-xl);
+}
+
+.month-navigation {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+.month-select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: white;
+  color: var(--text-primary);
+  font-size: 1rem;
+  min-width: 200px;
+  text-align: center;
+}
+
+/* Budget Templates */
+.budget-templates {
+  margin-bottom: var(--spacing-xl);
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.template-card {
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: white;
+  text-align: center;
+}
+
+.template-card h4 {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.template-card p {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.template-total {
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1.125rem;
+}
+
 /* Budgets Overview */
 .budgets-overview {
   margin-bottom: var(--spacing-xl);
@@ -32,10 +99,50 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
 }
 
 .overview-stat {
   text-align: center;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-value.over-budget {
+  color: var(--danger);
+}
+
+.stat-value.warning {
+  color: var(--warning);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Overall Progress Bar */
+.overall-progress {
+  margin-top: var(--spacing-lg);
+}
+
+.overall-progress .progress-bar {
+  height: 12px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.overall-progress .progress-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 /* Budget List */
@@ -50,6 +157,11 @@
   background: white;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+  transition: box-shadow 0.2s ease;
+}
+
+.budget-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .budget-header {
@@ -63,6 +175,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
+  flex: 1;
 }
 
 .budget-icon {
@@ -72,6 +185,25 @@
 .budget-name {
   font-weight: 600;
   color: var(--text-primary);
+}
+
+/* Budget Alerts */
+.budget-alert {
+  font-size: 0.75rem;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  margin-left: var(--spacing-sm);
+}
+
+.budget-alert--danger {
+  background: var(--danger);
+  color: white;
+}
+
+.budget-alert--warning {
+  background: var(--warning);
+  color: white;
 }
 
 .budget-amounts {
@@ -100,6 +232,12 @@
   text-align: right;
 }
 
+.budget-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
 /* Budget Progress */
 .budget-progress {
   margin-bottom: var(--spacing-md);
@@ -116,8 +254,7 @@
 
 .progress-fill {
   height: 100%;
-  background: var(--secondary);
-  transition: all var(--transition-slow);
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 .progress-text {
@@ -126,32 +263,133 @@
   text-align: right;
 }
 
+/* Budget Footer */
+.budget-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .budget-remaining {
-  text-align: right;
+  flex: 1;
 }
 
 .remaining-amount {
-  font-weight: 600;
-  color: var(--secondary);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
 }
 
 .remaining-amount.over-budget {
   color: var(--danger);
+  font-weight: 600;
+}
+
+/* Budget Rollover */
+.budget-rollover {
+  display: flex;
+  align-items: center;
+}
+
+.rollover-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  user-select: none;
+}
+
+.rollover-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+}
+
+.rollover-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .budget-header {
+  .budgets-header {
     flex-direction: column;
-    align-items: flex-start;
     gap: var(--spacing-md);
   }
-  
-  .budget-amounts {
-    align-self: flex-end;
+
+  .budgets-actions {
+    width: 100%;
+    justify-content: flex-start;
   }
-  
+
+  .month-navigation {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .month-select {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+
   .overview-stats {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .budget-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .budget-amounts {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .budget-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .budget-rollover {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* Loading States */
+.budget-item.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Animation for budget alerts */
+@keyframes budgetAlertPulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.budget-alert--danger {
+  animation: budgetAlertPulse 2s infinite;
+}
+
+/* Hover effects for interactive elements */
+.budget-input:hover {
+  border-color: var(--primary);
+}
+
+.rollover-toggle:hover .rollover-label {
+  color: var(--text-primary);
+}
+
+.template-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
 } 

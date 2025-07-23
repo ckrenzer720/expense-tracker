@@ -21,6 +21,9 @@
 @import './pages/dashboard.css';
 @import './pages/expenses.css';
 @import './pages/budgets.css';
+@import './pages/budget-history.css';
+@import './pages/budget-page.css';
+@import './pages/budget-alerts.css';
 @import './pages/analytics.css';
 
 /* 5. Utility Classes */

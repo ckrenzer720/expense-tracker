@@ -5,7 +5,7 @@ import {
   Sidebar,
   Dashboard,
   Expenses,
-  Budgets,
+  BudgetPage,
   Analytics,
   ErrorBoundary,
   ErrorTestComponent,
@@ -22,7 +22,7 @@ function App() {
       case ROUTES.EXPENSES:
         return <Expenses />;
       case ROUTES.BUDGETS:
-        return <Budgets />;
+        return <BudgetPage />;
       case ROUTES.ANALYTICS:
         return <Analytics />;
       default:

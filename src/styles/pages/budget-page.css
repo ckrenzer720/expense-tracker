@@ -1,0 +1,93 @@
+/* Budget Page Styles */
+.budget-page {
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Budget Tabs */
+.budget-tabs {
+  margin-bottom: var(--spacing-xl);
+}
+
+.tab-navigation {
+  display: flex;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+}
+
+.tab-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: white;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.tab-button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.tab-button.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.tab-icon {
+  font-size: 1rem;
+}
+
+.tab-label {
+  font-weight: 600;
+}
+
+/* Tab Content */
+.tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tab-navigation {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .tab-button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* Loading state for tab content */
+.tab-content.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Smooth transitions between tabs */
+.tab-content > * {
+  transition: opacity 0.3s ease;
+} 
