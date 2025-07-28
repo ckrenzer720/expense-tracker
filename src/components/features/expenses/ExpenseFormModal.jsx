@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useExpense } from "../../../hooks/useExpense";
-import { validateExpense } from "../../../utils/validation";
-import { getErrorMessage } from "../../../utils/errorHandling";
+import { useExpense } from "../../../hooks";
+import { validateExpense } from "../../../utils";
+import { getErrorMessage } from "../../../utils";
 import { Button, LoadingSpinner } from "../../common";
 
 const ExpenseFormModal = ({ onClose, onSuccess }) => {

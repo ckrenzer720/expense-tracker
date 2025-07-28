@@ -1,9 +1,6 @@
 import React from "react";
-import { useExpense } from "../../../hooks/useExpense";
-import {
-  formatCurrency,
-  getCurrentMonthExpenses,
-} from "../../../utils/currency";
+import { useExpense } from "../../../hooks";
+import { formatCurrency, getCurrentMonthExpenses } from "../../../utils";
 import { Card, LoadingSkeleton, Button } from "../../common";
 
 const Analytics = () => {

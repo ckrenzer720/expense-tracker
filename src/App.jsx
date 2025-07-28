@@ -10,7 +10,7 @@ import {
   ErrorBoundary,
   ErrorTestComponent,
 } from "./components";
-import { ROUTES } from "./constants/routes";
+import { ROUTES } from "./constants";
 
 function App() {
   const [currentView, setCurrentView] = useState(ROUTES.DASHBOARD);

@@ -1,5 +1,5 @@
 import React from "react";
-import { NAV_ITEMS } from "../../constants/routes";
+import { NAV_ITEMS } from "../../constants";
 
 const Header = ({ currentView, setCurrentView }) => {
   return (

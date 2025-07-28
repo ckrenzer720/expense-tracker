@@ -4,12 +4,8 @@ import {
   EXPENSE_CATEGORIES,
   DEFAULT_BUDGETS,
   STORAGE_KEYS,
-} from "../constants/categories";
-import {
-  logError,
-  validateData,
-  attemptRecovery,
-} from "../utils/errorHandling";
+} from "../constants";
+import { logError, validateData, attemptRecovery } from "../utils";
 import {
   loadBudgetsFromStorage,
   saveBudgetsToStorage,
@@ -18,7 +14,7 @@ import {
   getBudgetForCategory,
   getBudgetsForMonth,
   getTotalBudgetForMonth,
-} from "../utils/budget";
+} from "../utils";
 
 const initialState = {
   expenses: [],

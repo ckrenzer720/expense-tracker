@@ -1,10 +1,10 @@
 import React from "react";
-import { useExpense } from "../../../hooks/useExpense";
+import { useExpense } from "../../../hooks";
 import {
   formatCurrency,
   calculateTotal,
   getCurrentMonthExpenses,
-} from "../../../utils/currency";
+} from "../../../utils";
 import { Card, Button, LoadingSkeleton } from "../../common";
 
 const Dashboard = () => {

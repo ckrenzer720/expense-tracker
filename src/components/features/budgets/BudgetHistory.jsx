@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { useExpense } from "../../../hooks/useExpense";
+import { useExpense } from "../../../hooks";
 import {
   formatCurrency,
   calculateTotalByCategory,
   getCurrentMonthExpenses,
-} from "../../../utils/currency";
-import { getCurrentMonth, formatMonth } from "../../../utils/budget";
+} from "../../../utils";
+import { getCurrentMonth, formatMonth } from "../../../utils";
 import { Card } from "../../common";
 
 const BudgetHistory = () => {
@@ -230,8 +230,8 @@ const BudgetHistory = () => {
                           backgroundColor: data.isOverBudget
                             ? "var(--danger)"
                             : data.percentageUsed >= 80
-                            ? "var(--warning)"
-                            : "var(--secondary)",
+                              ? "var(--warning)"
+                              : "var(--secondary)",
                         }}
                       ></div>
                     </div>
@@ -293,8 +293,8 @@ const BudgetHistory = () => {
                         backgroundColor: cat.isOverBudget
                           ? "var(--danger)"
                           : cat.percentage >= 80
-                          ? "var(--warning)"
-                          : "var(--secondary)",
+                            ? "var(--warning)"
+                            : "var(--secondary)",
                       }}
                     ></div>
                   </div>

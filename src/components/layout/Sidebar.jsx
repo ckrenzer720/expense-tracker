@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useExpense } from "../../hooks/useExpense";
+import { useExpense } from "../../hooks";
 import { ExpenseFormModal } from "../features/expenses";
-import { ROUTES } from "../../constants/routes";
+import { ROUTES } from "../../constants";
 
 const Sidebar = ({ setCurrentView }) => {
   const { categories, expenses, currentMonth, getTotalBudgetForMonth } =

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useExpense } from "../../../hooks/useExpense";
-import { formatCurrency } from "../../../utils/currency";
+import { useExpense } from "../../../hooks";
+import { formatCurrency } from "../../../utils";
 import {
   Card,
   Button,
@@ -9,7 +9,7 @@ import {
   LoadingSkeleton,
 } from "../../common";
 import ExpenseFormModal from "./ExpenseFormModal";
-import { PAGE_TITLES, PAGE_DESCRIPTIONS } from "../../../constants/routes";
+import { PAGE_TITLES, PAGE_DESCRIPTIONS } from "../../../constants";
 
 const Expenses = () => {
   const { expenses, categories, removeExpense, loading, error } = useExpense();

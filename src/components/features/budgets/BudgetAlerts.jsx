@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
-import { useExpense } from "../../../hooks/useExpense";
+import { useExpense } from "../../../hooks";
 import {
   formatCurrency,
   calculateTotalByCategory,
   getCurrentMonthExpenses,
-} from "../../../utils/currency";
+} from "../../../utils";
 import { Card } from "../../common";
 
 const BudgetAlerts = () => {
