@@ -10,26 +10,26 @@ export const EXPENSE_CATEGORIES = [
   { id: "8", name: "Other", color: "#6B7280", icon: "📝" },
 ];
 
-// Default Budgets (legacy format for migration)
+// Default Budgets (legacy format for migration - kept for backward compatibility)
 export const DEFAULT_BUDGETS = {
-  1: 500, // Food & Dining
-  2: 300, // Transportation
-  3: 400, // Shopping
-  4: 200, // Entertainment
-  5: 150, // Utilities
-  6: 100, // Healthcare
-  7: 200, // Education
-  8: 150, // Other
+  1: 0, // Food & Dining - Start with 0, user will set their own
+  2: 0, // Transportation
+  3: 0, // Shopping
+  4: 0, // Entertainment
+  5: 0, // Utilities
+  6: 0, // Healthcare
+  7: 0, // Education
+  8: 0, // Other
 };
 
-// New Budget Structure - Monthly Budgets
+// New Budget Structure - Monthly Budgets (starts with zero budgets)
 export const createDefaultMonthlyBudgets = (month = null) => {
   const currentMonth = month || new Date().toISOString().slice(0, 7); // YYYY-MM format
 
   return EXPENSE_CATEGORIES.map((category) => ({
     id: `${category.id}-${currentMonth}`,
     categoryId: category.id,
-    amount: DEFAULT_BUDGETS[category.id] || 0,
+    amount: 0, // Start with 0 - user will set their own budget
     month: currentMonth,
     rollover: false,
     createdAt: new Date().toISOString(),

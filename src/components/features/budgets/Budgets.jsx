@@ -23,6 +23,7 @@ const Budgets = () => {
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [showTemplates, setShowTemplates] = useState(false);
+  const [customBudgetAmount, setCustomBudgetAmount] = useState("");
 
   // Get current month expenses for budget tracking
   const currentMonthExpenses = useMemo(() => {
@@ -75,58 +76,87 @@ const Budgets = () => {
     return "var(--secondary)";
   };
 
-  // Budget templates
+  // Budget templates with customizable base amounts
   const budgetTemplates = [
     {
       name: "Conservative",
       description: "Tight budget for saving money",
-      budgets: {
-        1: 300, // Food & Dining
-        2: 200, // Transportation
-        3: 250, // Shopping
-        4: 150, // Entertainment
-        5: 120, // Utilities
-        6: 80, // Healthcare
-        7: 150, // Education
-        8: 100, // Other
+      baseAmount: 1500,
+      percentages: {
+        1: 20, // Food & Dining - 20% of base
+        2: 13, // Transportation - 13% of base
+        3: 17, // Shopping - 17% of base
+        4: 10, // Entertainment - 10% of base
+        5: 8, // Utilities - 8% of base
+        6: 5, // Healthcare - 5% of base
+        7: 10, // Education - 10% of base
+        8: 7, // Other - 7% of base
       },
     },
     {
       name: "Balanced",
       description: "Moderate spending with room for fun",
-      budgets: {
-        1: 500, // Food & Dining
-        2: 300, // Transportation
-        3: 400, // Shopping
-        4: 200, // Entertainment
-        5: 150, // Utilities
-        6: 100, // Healthcare
-        7: 200, // Education
-        8: 150, // Other
+      baseAmount: 2500,
+      percentages: {
+        1: 20, // Food & Dining - 20% of base
+        2: 12, // Transportation - 12% of base
+        3: 16, // Shopping - 16% of base
+        4: 8, // Entertainment - 8% of base
+        5: 6, // Utilities - 6% of base
+        6: 4, // Healthcare - 4% of base
+        7: 8, // Education - 8% of base
+        8: 6, // Other - 6% of base
       },
     },
     {
       name: "Luxury",
       description: "Comfortable lifestyle with premium spending",
-      budgets: {
-        1: 800, // Food & Dining
-        2: 500, // Transportation
-        3: 600, // Shopping
-        4: 400, // Entertainment
-        5: 200, // Utilities
-        6: 150, // Healthcare
-        7: 300, // Education
-        8: 250, // Other
+      baseAmount: 4000,
+      percentages: {
+        1: 20, // Food & Dining - 20% of base
+        2: 12, // Transportation - 12% of base
+        3: 15, // Shopping - 15% of base
+        4: 10, // Entertainment - 10% of base
+        5: 5, // Utilities - 5% of base
+        6: 4, // Healthcare - 4% of base
+        7: 7, // Education - 7% of base
+        8: 7, // Other - 7% of base
       },
     },
   ];
 
-  // Apply budget template
-  const applyBudgetTemplate = (template) => {
-    Object.entries(template.budgets).forEach(([categoryId, amount]) => {
+  // Apply budget template with custom base amount
+  const applyBudgetTemplate = (template, customBaseAmount = null) => {
+    const baseAmount = customBaseAmount || template.baseAmount;
+
+    Object.entries(template.percentages).forEach(([categoryId, percentage]) => {
+      const amount = Math.round((baseAmount * percentage) / 100);
       setBudget(categoryId, amount, selectedMonth);
     });
     setShowTemplates(false);
+  };
+
+  // Quick set total budget with smart distribution
+  const quickSetBudget = (totalAmount) => {
+    const amount = parseFloat(totalAmount);
+    if (isNaN(amount) || amount <= 0) return;
+
+    // Smart distribution based on typical spending patterns
+    const distribution = {
+      1: 25, // Food & Dining - 25%
+      2: 15, // Transportation - 15%
+      3: 20, // Shopping - 20%
+      4: 10, // Entertainment - 10%
+      5: 8, // Utilities - 8%
+      6: 5, // Healthcare - 5%
+      7: 8, // Education - 8%
+      8: 9, // Other - 9%
+    };
+
+    Object.entries(distribution).forEach(([categoryId, percentage]) => {
+      const budgetAmount = Math.round((amount * percentage) / 100);
+      setBudget(categoryId, budgetAmount, selectedMonth);
+    });
   };
 
   // Handle month change
@@ -196,6 +226,15 @@ const Budgets = () => {
           >
             {showTemplates ? "Hide" : "Show"} Templates
           </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              const amount = prompt("Enter your total monthly budget:");
+              if (amount) quickSetBudget(amount);
+            }}
+          >
+            Quick Set Budget
+          </Button>
         </div>
       </div>
 
@@ -234,28 +273,79 @@ const Budgets = () => {
       {showTemplates && (
         <div className="budget-templates">
           <Card title="Budget Templates">
-            <div className="template-grid">
-              {budgetTemplates.map((template) => (
-                <div key={template.name} className="template-card">
-                  <h4>{template.name}</h4>
-                  <p>{template.description}</p>
-                  <div className="template-total">
-                    Total:{" "}
-                    {formatCurrency(
-                      Object.values(template.budgets).reduce(
-                        (sum, amount) => sum + amount,
-                        0
-                      )
-                    )}
-                  </div>
-                  <Button
-                    variant="primary"
-                    onClick={() => applyBudgetTemplate(template)}
-                  >
-                    Apply Template
-                  </Button>
+            <div className="template-intro">
+              <p>Choose a template to get started, or customize the amount:</p>
+              <div className="custom-amount-input">
+                <label htmlFor="customAmount">Custom Monthly Budget:</label>
+                <div className="input-group">
+                  <span className="currency-symbol">$</span>
+                  <input
+                    type="number"
+                    id="customAmount"
+                    value={customBudgetAmount}
+                    onChange={(e) => setCustomBudgetAmount(e.target.value)}
+                    placeholder="Enter your monthly budget"
+                    min="0"
+                    step="100"
+                    className="custom-amount-field"
+                  />
                 </div>
-              ))}
+              </div>
+            </div>
+
+            <div className="template-grid">
+              {budgetTemplates.map((template) => {
+                const baseAmount = customBudgetAmount
+                  ? parseFloat(customBudgetAmount)
+                  : template.baseAmount;
+                const totalAmount = Object.values(template.percentages).reduce(
+                  (sum, percentage) => sum + (baseAmount * percentage) / 100,
+                  0
+                );
+
+                return (
+                  <div key={template.name} className="template-card">
+                    <h4>{template.name}</h4>
+                    <p>{template.description}</p>
+                    <div className="template-total">
+                      Total: {formatCurrency(totalAmount)}
+                    </div>
+                    <div className="template-breakdown">
+                      <small>
+                        {Object.entries(template.percentages).map(
+                          ([categoryId, percentage]) => {
+                            const category = categories.find(
+                              (cat) => cat.id === categoryId
+                            );
+                            const amount = Math.round(
+                              (baseAmount * percentage) / 100
+                            );
+                            return (
+                              <div key={categoryId} className="breakdown-item">
+                                {category?.icon} {category?.name}:{" "}
+                                {formatCurrency(amount)}
+                              </div>
+                            );
+                          }
+                        )}
+                      </small>
+                    </div>
+                    <Button
+                      variant="primary"
+                      onClick={() =>
+                        applyBudgetTemplate(
+                          template,
+                          customBudgetAmount
+                            ? parseFloat(customBudgetAmount)
+                            : null
+                        )
+                      }
+                    >
+                      Apply Template
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
           </Card>
         </div>
@@ -328,6 +418,37 @@ const Budgets = () => {
 
       {/* Category Budgets */}
       <div className="budgets-content">
+        {budgetStats.totalBudget === 0 && (
+          <Card title="Getting Started" className="getting-started-card">
+            <div className="getting-started-content">
+              <div className="getting-started-icon">💰</div>
+              <h3>Set Up Your Monthly Budget</h3>
+              <p>
+                You haven't set any budgets yet. Use the templates above or the
+                "Quick Set Budget" button to get started with your monthly
+                spending plan.
+              </p>
+              <div className="getting-started-actions">
+                <Button
+                  variant="primary"
+                  onClick={() => setShowTemplates(true)}
+                >
+                  Choose Template
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    const amount = prompt("Enter your total monthly budget:");
+                    if (amount) quickSetBudget(amount);
+                  }}
+                >
+                  Quick Set Budget
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+
         <Card title="Category Budgets">
           <div className="budget-list">
             {categories.map((category) => {

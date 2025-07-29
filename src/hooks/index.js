@@ -1,2 +1,2 @@
 // Hooks - Barrel Exports
-export { default as useExpense } from "./useExpense.js";
+export { useExpense } from "./useExpense.js";
