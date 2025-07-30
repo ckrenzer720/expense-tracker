@@ -12,7 +12,10 @@ import {
  * @returns {string} Current month
  */
 export const getCurrentMonth = () => {
-  return new Date().toISOString().slice(0, 7);
+  const date = new Date();
+  const year = date.getFullYear();
+  const monthNum = String(date.getMonth() + 1).padStart(2, "0");
+  return `${year}-${monthNum}`;
 };
 
 /**
@@ -21,9 +24,17 @@ export const getCurrentMonth = () => {
  * @returns {string} Previous month
  */
 export const getPreviousMonth = (month = null) => {
-  const date = month ? new Date(month + "-01") : new Date();
+  let date;
+  if (month) {
+    const [year, monthNum] = month.split("-").map(Number);
+    date = new Date(year, monthNum - 1, 1);
+  } else {
+    date = new Date();
+  }
   date.setMonth(date.getMonth() - 1);
-  return date.toISOString().slice(0, 7);
+  const year = date.getFullYear();
+  const monthNum = String(date.getMonth() + 1).padStart(2, "0");
+  return `${year}-${monthNum}`;
 };
 
 /**
@@ -32,9 +43,17 @@ export const getPreviousMonth = (month = null) => {
  * @returns {string} Next month
  */
 export const getNextMonth = (month = null) => {
-  const date = month ? new Date(month + "-01") : new Date();
+  let date;
+  if (month) {
+    const [year, monthNum] = month.split("-").map(Number);
+    date = new Date(year, monthNum - 1, 1);
+  } else {
+    date = new Date();
+  }
   date.setMonth(date.getMonth() + 1);
-  return date.toISOString().slice(0, 7);
+  const year = date.getFullYear();
+  const monthNum = String(date.getMonth() + 1).padStart(2, "0");
+  return `${year}-${monthNum}`;
 };
 
 /**
@@ -43,7 +62,8 @@ export const getNextMonth = (month = null) => {
  * @returns {string} Formatted month
  */
 export const formatMonth = (month) => {
-  const date = new Date(month + "-01");
+  const [year, monthNum] = month.split("-").map(Number);
+  const date = new Date(year, monthNum - 1, 1);
   return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -58,9 +78,10 @@ export const formatMonth = (month) => {
  * @returns {Object|null} Budget object or null if not found
  */
 export const getBudgetForCategory = (budgets, categoryId, month) => {
-  return budgets.find(
+  const budget = budgets.find(
     (budget) => budget.categoryId === categoryId && budget.month === month
   );
+  return budget || null;
 };
 
 /**
