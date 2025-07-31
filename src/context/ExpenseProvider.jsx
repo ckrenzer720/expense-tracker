@@ -167,7 +167,7 @@ export const ExpenseProvider = ({ children }) => {
     };
 
     loadBudgets();
-  }, []);
+  }, [state.expenses]);
 
   // Save expenses to localStorage whenever they change
   useEffect(() => {

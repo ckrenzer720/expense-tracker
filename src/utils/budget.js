@@ -135,7 +135,6 @@ export const migrateLegacyBudgets = (legacyBudgets, month = null) => {
 export const applyBudgetRollover = (budgets, month, expenses) => {
   const previousMonth = getPreviousMonth(month);
   const previousBudgets = getBudgetsForMonth(budgets, previousMonth);
-  const currentBudgets = getBudgetsForMonth(budgets, month);
 
   // Filter expenses for previous month
   const previousMonthExpenses = expenses.filter((expense) =>

@@ -30,4 +30,27 @@
 @import './utilities/utilities.css';
 
 /* 6. Responsive Design */
-@import './responsive/responsive.css'; 
+@import './responsive/responsive.css';
+
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+/* Optimize animations and transitions */
+.app,
+.main-container,
+.main {
+  will-change: transform;
+}
+
+/* Performance optimizations for animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+} 

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { useExpense } from "../../../hooks";
 import {
   formatCurrency,
@@ -106,19 +106,25 @@ const BudgetHistory = () => {
   };
 
   // Get top spending categories for the current month
-  const getTopSpendingCategories = () => {
-    const currentMonthData = monthlyData[monthlyData.length - 1];
-    if (!currentMonthData) return [];
-
-    return currentMonthData.categoryBreakdown
-      .filter((cat) => cat.spent > 0)
+  const getTopSpendingCategories = useCallback(() => {
+    return monthlyData
+      .flatMap((data) => data.categoryBreakdown)
+      .reduce((acc, category) => {
+        const existing = acc.find((c) => c.category === category.category);
+        if (existing) {
+          existing.spent += category.spent;
+        } else {
+          acc.push({ ...category });
+        }
+        return acc;
+      }, [])
       .sort((a, b) => b.spent - a.spent)
       .slice(0, 3);
-  };
+  }, [monthlyData]);
 
   const topSpendingCategories = useMemo(
     () => getTopSpendingCategories(),
-    [monthlyData]
+    [getTopSpendingCategories]
   );
 
   return (
