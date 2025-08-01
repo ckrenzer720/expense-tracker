@@ -6,6 +6,25 @@ export const formatCurrency = (amount, currency = "USD") => {
   }).format(amount);
 };
 
+// Parse currency string to number
+export const parseCurrency = (currencyString) => {
+  if (typeof currencyString !== "string") {
+    return 0;
+  }
+
+  // Remove currency symbols and commas, then parse as float
+  const cleaned = currencyString.replace(/[$,€£¥]/g, "").replace(/,/g, "");
+  const parsed = parseFloat(cleaned);
+
+  return isNaN(parsed) ? 0 : parsed;
+};
+
+// Calculate percentage
+export const calculatePercentage = (value, total) => {
+  if (total === 0) return 0;
+  return Math.round((value / total) * 100);
+};
+
 // Calculate total expenses
 export const calculateTotal = (expenses) => {
   return expenses.reduce((total, expense) => total + expense.amount, 0);

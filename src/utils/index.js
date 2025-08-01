@@ -18,7 +18,6 @@ export {
   getBudgetsForMonth,
   getTotalBudgetForMonth,
   migrateLegacyBudgets,
-  createDefaultMonthlyBudgets,
   applyBudgetRollover,
   createBudgetsForMonth,
   validateBudget,
