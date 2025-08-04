@@ -27,7 +27,7 @@ function App() {
   const renderCurrentView = () => {
     switch (currentView) {
       case ROUTES.DASHBOARD:
-        return <Dashboard />;
+        return <Dashboard setCurrentView={setCurrentView} />;
       case ROUTES.EXPENSES:
         return <Expenses />;
       case ROUTES.BUDGETS:
@@ -35,7 +35,7 @@ function App() {
       case ROUTES.ANALYTICS:
         return <Analytics />;
       default:
-        return <Dashboard />;
+        return <Dashboard setCurrentView={setCurrentView} />;
     }
   };
 

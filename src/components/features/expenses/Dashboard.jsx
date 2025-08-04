@@ -7,10 +7,18 @@ import {
 } from "../../../utils";
 import { Card, Button, LoadingSkeleton } from "../../common";
 
-const Dashboard = () => {
-  const { expenses, categories, loading, error } = useExpense();
+const Dashboard = ({ setCurrentView }) => {
+  const {
+    expenses,
+    categories,
+    loading,
+    error,
+    getTotalBudgetForMonth,
+    currentMonth,
+  } = useExpense();
   const currentMonthExpenses = getCurrentMonthExpenses(expenses);
   const totalSpent = calculateTotal(currentMonthExpenses);
+  const totalBudget = getTotalBudgetForMonth(currentMonth);
   const recentExpenses = expenses.slice(0, 5);
 
   const getCategoryDisplayName = (categoryId) => {
@@ -119,8 +127,24 @@ const Dashboard = () => {
         </Card>
 
         <Card title="Budget" className="stat-card">
-          <div className="stat-value">{formatCurrency(2000 - totalSpent)}</div>
-          <div className="stat-label">Remaining</div>
+          <div className="stat-value">
+            {totalBudget > 0
+              ? formatCurrency(totalBudget - totalSpent)
+              : "$0.00"}
+          </div>
+          <div className="stat-label">
+            {totalBudget > 0 ? "Remaining" : "Set your budget"}
+          </div>
+          {totalBudget === 0 && (
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => setCurrentView("budgets")}
+              className="mt-2"
+            >
+              Set Budget
+            </Button>
+          )}
         </Card>
       </div>
 

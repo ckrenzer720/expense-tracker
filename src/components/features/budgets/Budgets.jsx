@@ -450,6 +450,17 @@ const Budgets = () => {
         )}
 
         <Card title="Category Budgets">
+          {budgetStats.totalBudget === 0 && (
+            <div className="budget-setup-message">
+              <p>
+                💰 Set your monthly budgets to start tracking your spending!
+              </p>
+              <p>
+                You can set individual category budgets or use the templates
+                above.
+              </p>
+            </div>
+          )}
           <div className="budget-list">
             {categories.map((category) => {
               const budgetData = getCategoryBudgetData(category.id);
