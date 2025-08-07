@@ -16,6 +16,7 @@
 @import './components/modal.css';
 @import './components/loading.css';
 @import './components/error.css';
+@import './components/animations.css';
 
 /* 4. Page Styles */
 @import './pages/dashboard.css';
