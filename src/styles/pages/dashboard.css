@@ -1,4 +1,31 @@
 /* Dashboard Page Styles - Modern Redesign */
+/* Full-width dashboard container */
+.dashboard-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Dashboard sections to fill available space */
+.dashboard-header {
+  width: 100%;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+}
+
+.dashboard-stats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-xl);
+  padding: 0 var(--spacing-xl) var(--spacing-2xl);
+}
+
+.dashboard-content {
+  width: 100%;
+  padding: 0 var(--spacing-xl) var(--spacing-2xl);
+}
+
 @keyframes heroFloat {
   0%, 100% {
     transform: translateY(0px);
@@ -481,6 +508,10 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
   .hero-stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -499,6 +530,19 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-header {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+  
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+    padding: 0 var(--spacing-lg) var(--spacing-xl);
+  }
+  
+  .dashboard-content {
+    padding: 0 var(--spacing-lg) var(--spacing-xl);
+  }
+  
   .dashboard-hero {
     padding: var(--spacing-xl) var(--spacing-lg);
     margin-bottom: var(--spacing-2xl);
@@ -525,6 +569,18 @@
 }
 
 @media (max-width: 480px) {
+  .dashboard-header {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  .dashboard-stats {
+    padding: 0 var(--spacing-md) var(--spacing-lg);
+  }
+  
+  .dashboard-content {
+    padding: 0 var(--spacing-md) var(--spacing-lg);
+  }
+  
   .dashboard-hero {
     padding: var(--spacing-lg) var(--spacing-md);
   }
