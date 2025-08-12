@@ -2,21 +2,23 @@
 .form-group {
   margin-bottom: var(--spacing-xl);
   position: relative;
+  padding: 0 var(--spacing-sm);
 }
 
 .form-group label {
   display: block;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
   font-weight: var(--font-weight-medium);
   color: var(--text-primary);
   font-size: var(--font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  padding-left: var(--spacing-xs);
 }
 
 .form-input {
   width: 100%;
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   font-size: var(--font-size-sm);
@@ -196,7 +198,7 @@ select.form-input {
   gap: var(--spacing-md);
   justify-content: flex-end;
   margin-top: var(--spacing-2xl);
-  padding-top: var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-sm) 0;
   border-top: 1px solid var(--border);
 }
 
@@ -250,11 +252,19 @@ select.form-input {
 
 @media (max-width: 480px) {
   .form-input {
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
     font-size: var(--font-size-base);
   }
   
   .form-section {
     padding: var(--spacing-md);
+  }
+  
+  .form-group {
+    padding: 0 var(--spacing-xs);
+  }
+  
+  .form-actions {
+    padding: var(--spacing-lg) var(--spacing-xs) 0;
   }
 } 
