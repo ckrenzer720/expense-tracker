@@ -38,6 +38,11 @@
   box-sizing: border-box;
 }
 
+/* Ensure fonts are applied globally */
+body {
+  font-family: 'Libertinus Sans', 'Newsreader', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 /* Optimize animations and transitions */
 .app,
 .main-container,
