@@ -27,28 +27,30 @@ const BudgetPage = () => {
   ];
 
   return (
-    <div className="budget-page">
-      {/* Tab Navigation */}
-      <div className="budget-tabs">
-        <Card>
-          <div className="tab-navigation">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <span className="tab-icon">{tab.icon}</span>
-                <span className="tab-label">{tab.label}</span>
-              </button>
-            ))}
-          </div>
-        </Card>
-      </div>
+    <div className="container">
+      <div className="budget-page">
+        {/* Tab Navigation */}
+        <div className="budget-tabs">
+          <Card>
+            <div className="tab-navigation">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  <span className="tab-icon">{tab.icon}</span>
+                  <span className="tab-label">{tab.label}</span>
+                </button>
+              ))}
+            </div>
+          </Card>
+        </div>
 
-      {/* Tab Content */}
-      <div className="tab-content">
-        {tabs.find((tab) => tab.id === activeTab)?.component}
+        {/* Tab Content */}
+        <div className="tab-content">
+          {tabs.find((tab) => tab.id === activeTab)?.component}
+        </div>
       </div>
     </div>
   );

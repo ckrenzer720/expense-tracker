@@ -38,7 +38,7 @@ const Dashboard = ({ setCurrentView }) => {
   // Show loading state while data is being loaded
   if (loading) {
     return (
-      <div className="dashboard-container">
+      <div className="container">
         <div className="dashboard-header">
           <h2>Dashboard</h2>
           <p>Welcome back! Here's your financial overview.</p>
@@ -70,7 +70,7 @@ const Dashboard = ({ setCurrentView }) => {
   // Show error state if there's an error
   if (error) {
     return (
-      <div className="dashboard-container">
+      <div className="container">
         <div className="dashboard-header">
           <h2>Dashboard</h2>
           <p>Welcome back! Here's your financial overview.</p>
@@ -109,7 +109,7 @@ const Dashboard = ({ setCurrentView }) => {
   }
 
   return (
-    <div className="dashboard-container">
+    <div className="container">
       <div className="dashboard-header">
         <h2>Dashboard</h2>
         <p>Welcome back! Here's your financial overview.</p>

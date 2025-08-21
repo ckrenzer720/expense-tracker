@@ -99,114 +99,117 @@ const BudgetAlerts = () => {
     getTotalBudgetForMonth,
   ]);
 
-  // Get alert statistics
+  // Calculate alert statistics
   const alertStats = useMemo(() => {
-    const dangerAlerts = budgetAlerts.filter(
+    const total = budgetAlerts.length;
+    const danger = budgetAlerts.filter(
       (alert) => alert.type === "danger"
-    );
-    const warningAlerts = budgetAlerts.filter(
+    ).length;
+    const warning = budgetAlerts.filter(
       (alert) => alert.type === "warning"
-    );
+    ).length;
 
-    return {
-      total: budgetAlerts.length,
-      danger: dangerAlerts.length,
-      warning: warningAlerts.length,
-    };
+    return { total, danger, warning };
   }, [budgetAlerts]);
 
   if (budgetAlerts.length === 0) {
     return (
-      <div className="budget-alerts">
-        <Card title="Budget Alerts">
-          <div className="no-alerts">
-            <div className="no-alerts-icon">✅</div>
-            <h4>All Good!</h4>
-            <p>Your budgets are within healthy limits.</p>
-          </div>
-        </Card>
+      <div className="container">
+        <div className="budget-alerts">
+          <Card title="Budget Alerts">
+            <div className="no-alerts">
+              <div className="no-alerts-icon">✅</div>
+              <h4>All Good!</h4>
+              <p>Your budgets are within healthy limits.</p>
+            </div>
+          </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="budget-alerts">
-      <Card title="Budget Alerts">
-        {/* Alert Summary */}
-        <div className="alert-summary">
-          <div className="alert-stat">
-            <span className="stat-number">{alertStats.total}</span>
-            <span className="stat-label">Total Alerts</span>
-          </div>
-          <div className="alert-stat">
-            <span className="stat-number stat-number--danger">
-              {alertStats.danger}
-            </span>
-            <span className="stat-label">Critical</span>
-          </div>
-          <div className="alert-stat">
-            <span className="stat-number stat-number--warning">
-              {alertStats.warning}
-            </span>
-            <span className="stat-label">Warnings</span>
-          </div>
-        </div>
-
-        {/* Alert List */}
-        <div className="alert-list">
-          {budgetAlerts.map((alert, index) => (
-            <div
-              key={`${alert.title}-${index}`}
-              className={`alert-item alert-item--${alert.type}`}
-            >
-              <div className="alert-icon">{alert.icon}</div>
-              <div className="alert-content">
-                <h4 className="alert-title">{alert.title}</h4>
-                <p className="alert-message">{alert.message}</p>
-                {alert.category && (
-                  <span className="alert-category">{alert.category}</span>
-                )}
-              </div>
-              <div className="alert-indicator">
-                <div
-                  className={`indicator-dot indicator-dot--${alert.type}`}
-                ></div>
-              </div>
+    <div className="container">
+      <div className="budget-alerts">
+        <Card title="Budget Alerts">
+          {/* Alert Summary */}
+          <div className="alert-summary">
+            <div className="alert-stat">
+              <span className="stat-number">{alertStats.total}</span>
+              <span className="stat-label">Total Alerts</span>
             </div>
-          ))}
-        </div>
+            <div className="alert-stat">
+              <span className="stat-number stat-number--danger">
+                {alertStats.danger}
+              </span>
+              <span className="stat-label">Critical</span>
+            </div>
+            <div className="alert-stat">
+              <span className="stat-number stat-number--warning">
+                {alertStats.warning}
+              </span>
+              <span className="stat-label">Warnings</span>
+            </div>
+          </div>
 
-        {/* Action Suggestions */}
-        <div className="alert-actions">
-          <h4>Suggested Actions</h4>
-          <ul className="action-list">
-            {alertStats.danger > 0 && (
+          {/* Alert List */}
+          <div className="alert-list">
+            {budgetAlerts.map((alert, index) => (
+              <div
+                key={`${alert.title}-${index}`}
+                className={`alert-item alert-item--${alert.type}`}
+              >
+                <div className="alert-icon">{alert.icon}</div>
+                <div className="alert-content">
+                  <h4 className="alert-title">{alert.title}</h4>
+                  <p className="alert-message">{alert.message}</p>
+                  {alert.category && (
+                    <span className="alert-category">{alert.category}</span>
+                  )}
+                </div>
+                <div className="alert-indicator">
+                  <div
+                    className={`indicator-dot indicator-dot--${alert.type}`}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Action Suggestions */}
+          <div className="alert-actions">
+            <h4>Suggested Actions</h4>
+            <ul className="action-list">
+              {alertStats.danger > 0 && (
+                <li className="action-item">
+                  <span className="action-icon">💰</span>
+                  <span>
+                    Review and reduce spending in over-budget categories
+                  </span>
+                </li>
+              )}
+              {alertStats.warning > 0 && (
+                <li className="action-item">
+                  <span className="action-icon">📊</span>
+                  <span>
+                    Monitor spending closely in categories near limits
+                  </span>
+                </li>
+              )}
               <li className="action-item">
-                <span className="action-icon">💰</span>
+                <span className="action-icon">📅</span>
+                <span>Consider adjusting budgets for next month</span>
+              </li>
+              <li className="action-item">
+                <span className="action-icon">🎯</span>
                 <span>
-                  Review and reduce spending in over-budget categories
+                  Set up spending reminders for high-priority categories
                 </span>
               </li>
-            )}
-            {alertStats.warning > 0 && (
-              <li className="action-item">
-                <span className="action-icon">📊</span>
-                <span>Monitor spending closely in categories near limits</span>
-              </li>
-            )}
-            <li className="action-item">
-              <span className="action-icon">📅</span>
-              <span>Consider adjusting budgets for next month</span>
-            </li>
-            <li className="action-item">
-              <span className="action-icon">🎯</span>
-              <span>
-                Set up spending reminders for high-priority categories
-              </span>
-            </li>
-          </ul>
-        </div>
-      </Card>
+            </ul>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
