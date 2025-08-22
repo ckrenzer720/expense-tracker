@@ -202,7 +202,7 @@ const Budgets = () => {
 
   if (loading) {
     return (
-      <div className="container">
+      <div className="budgets-content">
         <div className="budgets-header">
           <h2>Budgets</h2>
           <p>Loading budget data...</p>
@@ -213,7 +213,7 @@ const Budgets = () => {
   }
 
   return (
-    <div className="container">
+    <div className="budgets-content">
       <div className="budgets-header">
         <div>
           <h2>Budgets</h2>

@@ -3,6 +3,14 @@
   width: 100%;
 }
 
+/* Budget content wrappers for full-width layout */
+.budgets-content {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 .budget-tabs {
   margin-bottom: var(--spacing-xl);
 }

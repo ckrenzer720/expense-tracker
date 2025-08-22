@@ -66,7 +66,7 @@ const Analytics = () => {
   // Show loading state while data is being loaded
   if (loading) {
     return (
-      <div className="container">
+      <div className="analytics-content">
         <div className="analytics-header">
           <h2>Analytics</h2>
           <p>Insights into your spending patterns</p>
@@ -104,7 +104,7 @@ const Analytics = () => {
   // Show error state if there's an error
   if (error) {
     return (
-      <div className="container">
+      <div className="analytics-content">
         <div className="analytics-header">
           <h2>Analytics</h2>
           <p>Insights into your spending patterns</p>
@@ -147,7 +147,7 @@ const Analytics = () => {
   const monthlySpendingTrend = getMonthlySpendingTrend();
 
   return (
-    <div className="container">
+    <div className="analytics-content">
       <div className="analytics-header">
         <h2>Analytics</h2>
         <p>Insights into your spending patterns</p>

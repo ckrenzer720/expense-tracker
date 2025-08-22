@@ -1,4 +1,12 @@
 /* Analytics Page Styles */
+/* Analytics content wrapper for full-width layout */
+.analytics-content {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 .analytics-header {
   display: flex;
   justify-content: space-between;

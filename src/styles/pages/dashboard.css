@@ -1,4 +1,12 @@
 /* Dashboard Page Styles - Modern Redesign */
+/* Dashboard content wrapper for full-width layout */
+.dashboard-content {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* Dashboard sections to fill available space */
 .dashboard-header {
   margin-bottom: var(--spacing-2xl);
@@ -23,10 +31,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
-}
-
-.dashboard-content {
   margin-bottom: var(--spacing-2xl);
 }
 

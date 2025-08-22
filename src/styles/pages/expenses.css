@@ -1,4 +1,12 @@
 /* Expenses Page Styles */
+/* Expenses content wrapper for full-width layout */
+.expenses-content {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 .expenses-header {
   display: flex;
   justify-content: space-between;
