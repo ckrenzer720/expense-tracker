@@ -1,4 +1,4 @@
-/* Button Component Styles - Modern Dark Theme */
+/* Button Component Styles - Modern Theme */
 .button {
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
@@ -34,7 +34,7 @@
   left: 100%;
 }
 
-/* Button Variants */
+/* Button Variants - Modern Gradients */
 .button--primary {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
   color: var(--text-inverse);
@@ -44,6 +44,7 @@
 .button--primary:hover {
   transform: translateY(-2px);
   box-shadow: var(--glow-primary);
+  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary-dark) 100%);
 }
 
 .button--secondary {
@@ -55,6 +56,18 @@
 .button--secondary:hover {
   transform: translateY(-2px);
   box-shadow: var(--glow-secondary);
+  background: linear-gradient(135deg, var(--secondary-hover) 0%, var(--secondary-dark) 100%);
+}
+
+.button--success {
+  background: linear-gradient(135deg, var(--success) 0%, var(--success-hover) 100%);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-md);
+}
+
+.button--success:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-success);
 }
 
 .button--danger {
@@ -79,6 +92,17 @@
   box-shadow: var(--glow-warning);
 }
 
+.button--info {
+  background: linear-gradient(135deg, var(--info) 0%, var(--info-hover) 100%);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-md);
+}
+
+.button--info:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-info);
+}
+
 .button--outline {
   background: transparent;
   color: var(--text-primary);
@@ -92,6 +116,7 @@
   border-color: var(--primary);
   color: var(--primary);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .button--ghost {
@@ -104,6 +129,7 @@
   background: var(--surface-hover);
   color: var(--text-primary);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Button Sizes */

@@ -1,7 +1,7 @@
-/* Card Component Styles - Modern Dark Theme */
+/* Card Component Styles - Modern Theme */
 .card {
   padding: var(--spacing-xl);
-  background: rgba(30, 41, 59, 0.8);
+  background: var(--surface-overlay);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radius-xl);
@@ -19,7 +19,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
   pointer-events: none;
   z-index: -1;
 }
@@ -27,7 +27,7 @@
 .card:hover {
   box-shadow: var(--shadow-xl);
   transform: translateY(-2px);
-  border-color: var(--border-light);
+  border-color: var(--border-accent);
 }
 
 /* Card Variants */
@@ -107,8 +107,8 @@
 }
 
 .card--accent-success {
-  border-left: 4px solid var(--secondary);
-  box-shadow: var(--shadow-lg), var(--glow-secondary);
+  border-left: 4px solid var(--success);
+  box-shadow: var(--shadow-lg), var(--glow-success);
 }
 
 .card--accent-warning {
@@ -121,18 +121,28 @@
   box-shadow: var(--shadow-lg), var(--glow-danger);
 }
 
+.card--accent-info {
+  border-left: 4px solid var(--info);
+  box-shadow: var(--shadow-lg), var(--glow-info);
+}
+
 /* Card with gradient background */
 .card--gradient {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.9) 100%);
+  background: linear-gradient(135deg, var(--surface-overlay) 0%, rgba(51, 65, 85, 0.9) 100%);
 }
 
 .card--gradient-primary {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 41, 59, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, var(--surface-overlay) 100%);
   border-color: var(--primary);
 }
 
 .card--gradient-success {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(30, 41, 59, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, var(--surface-overlay) 100%);
+  border-color: var(--success);
+}
+
+.card--gradient-secondary {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, var(--surface-overlay) 100%);
   border-color: var(--secondary);
 }
 
@@ -150,6 +160,13 @@
   background: rgba(51, 65, 85, 0.4);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
+  transition: all var(--transition-normal);
+}
+
+.card-stat:hover {
+  background: rgba(51, 65, 85, 0.6);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .card-stat-value {

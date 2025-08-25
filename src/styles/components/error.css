@@ -1,11 +1,11 @@
-/* Error Boundary Component Styles - Modern Dark Theme */
+/* Error Boundary Component Styles - Modern Theme */
 .error-boundary {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 400px;
   padding: var(--spacing-2xl);
-  background: rgba(30, 41, 59, 0.8);
+  background: var(--surface-overlay);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radius-2xl);
@@ -101,7 +101,7 @@
   white-space: pre-wrap;
   word-break: break-word;
   color: var(--danger);
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--danger-bg);
   padding: var(--spacing-md);
   border-radius: var(--radius-lg);
   border-left: 3px solid var(--danger);
@@ -143,7 +143,7 @@
 }
 
 .error-test-modal {
-  background: rgba(30, 41, 59, 0.95);
+  background: var(--surface-overlay);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border);
@@ -244,7 +244,7 @@
   font-size: var(--font-size-sm);
   margin-top: var(--spacing-md);
   padding: var(--spacing-md);
-  background: rgba(245, 158, 11, 0.1);
+  background: var(--warning-bg);
   border-radius: var(--radius-lg);
   border-left: 3px solid var(--warning);
 }

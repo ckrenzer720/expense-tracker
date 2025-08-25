@@ -1,7 +1,7 @@
-/* Sidebar Styles - Modern Dark Theme */
+/* Sidebar Styles - Modern Theme */
 .sidebar {
   width: 320px;
-  background: rgba(30, 41, 59, 0.9);
+  background: var(--surface-overlay);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-right: 1px solid var(--border);
@@ -18,7 +18,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
   pointer-events: none;
   z-index: -1;
 }
@@ -69,6 +69,7 @@
 .add-expense-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--glow-primary);
+  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary-dark) 100%);
 }
 
 .add-expense-btn:hover::before {
@@ -106,7 +107,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   opacity: 0;
   transition: opacity var(--transition-normal);
   z-index: -1;

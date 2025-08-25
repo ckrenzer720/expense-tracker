@@ -1,4 +1,4 @@
-/* Modal Component Styles - Modern Dark Theme */
+/* Modal Component Styles - Modern Theme */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -26,7 +26,7 @@
 }
 
 .modal-content {
-  background: rgba(30, 41, 59, 0.95);
+  background: var(--surface-overlay);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: var(--radius-2xl);
@@ -50,8 +50,8 @@
   bottom: 0;
   background: linear-gradient(
     135deg,
-    rgba(139, 115, 85, 0.05) 0%,
-    rgba(210, 105, 30, 0.05) 100%
+    rgba(59, 130, 246, 0.05) 0%,
+    rgba(139, 92, 246, 0.05) 100%
   );
   pointer-events: none;
   z-index: -1;
@@ -166,17 +166,22 @@
 /* Modal variants */
 .modal--danger .modal-header {
   border-bottom-color: var(--danger);
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--danger-bg);
 }
 
 .modal--warning .modal-header {
   border-bottom-color: var(--warning);
-  background: rgba(245, 158, 11, 0.1);
+  background: var(--warning-bg);
 }
 
 .modal--success .modal-header {
   border-bottom-color: var(--success);
-  background: rgba(16, 185, 129, 0.1);
+  background: var(--success-bg);
+}
+
+.modal--info .modal-header {
+  border-bottom-color: var(--info);
+  background: var(--info-bg);
 }
 
 /* Modal with icon */
@@ -192,23 +197,23 @@
 }
 
 .modal-icon--danger {
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--danger-bg);
   color: var(--danger);
 }
 
 .modal-icon--warning {
-  background: rgba(245, 158, 11, 0.1);
+  background: var(--warning-bg);
   color: var(--warning);
 }
 
 .modal-icon--success {
-  background: rgba(16, 185, 129, 0.1);
+  background: var(--success-bg);
   color: var(--success);
 }
 
 .modal-icon--info {
-  background: rgba(59, 130, 246, 0.1);
-  color: var(--primary);
+  background: var(--info-bg);
+  color: var(--info);
 }
 
 /* Responsive modal */
