@@ -107,9 +107,14 @@ export const validateData = (data, dataType) => {
           throw new Error("Invalid expense data");
         }
 
+        const amount = parseFloat(data.amount);
+        if (isNaN(amount) || amount <= 0) {
+          throw new Error("Invalid expense amount - must be greater than 0");
+        }
+
         const sanitized = {
           id: data.id || Date.now().toString(),
-          amount: parseFloat(data.amount) || 0,
+          amount: amount,
           category: data.category || "",
           date: data.date || new Date().toISOString().split("T")[0],
           notes: data.notes || "",
@@ -214,8 +219,12 @@ export const attemptRecovery = (error, context) => {
         break;
 
       case "data":
-        // Try to reset to default state
-        if (error.message.includes("JSON")) {
+        // Try to reset to default state only for critical JSON errors
+        if (
+          error.message.includes("JSON") &&
+          error.message.includes("Unexpected token")
+        ) {
+          // Only remove data for critical JSON parsing errors
           localStorage.removeItem("expenses");
           localStorage.removeItem("budgets");
           return true;

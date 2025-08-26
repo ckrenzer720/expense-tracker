@@ -97,7 +97,15 @@ export const ExpenseProvider = ({ children }) => {
       try {
         dispatch({ type: "LOADING_SET", payload: true });
 
+        // Check if localStorage is available
+        if (typeof localStorage === "undefined") {
+          console.warn("localStorage is not available");
+          dispatch({ type: "EXPENSES_SET", payload: [] });
+          return;
+        }
+
         const savedExpenses = localStorage.getItem(STORAGE_KEYS.EXPENSES);
+
         if (savedExpenses) {
           const parsedExpenses = JSON.parse(savedExpenses);
 
@@ -173,10 +181,22 @@ export const ExpenseProvider = ({ children }) => {
   useEffect(() => {
     const saveExpenses = () => {
       try {
-        localStorage.setItem(
-          STORAGE_KEYS.EXPENSES,
-          JSON.stringify(state.expenses)
-        );
+        // Check if localStorage is available
+        if (typeof localStorage === "undefined") {
+          console.warn("localStorage is not available");
+          return;
+        }
+
+        const expensesJson = JSON.stringify(state.expenses);
+
+        // Check if the data is too large for localStorage
+        if (expensesJson.length > 5 * 1024 * 1024) {
+          // 5MB limit
+          console.warn("Expenses data is too large for localStorage");
+          return;
+        }
+
+        localStorage.setItem(STORAGE_KEYS.EXPENSES, expensesJson);
       } catch (error) {
         logError(error, {
           component: "ExpenseProvider",
@@ -188,12 +208,9 @@ export const ExpenseProvider = ({ children }) => {
       }
     };
 
-    if (
-      state.expenses.length > 0 ||
-      localStorage.getItem(STORAGE_KEYS.EXPENSES)
-    ) {
-      saveExpenses();
-    }
+    // Always save expenses to localStorage, even if the array is empty
+    // This ensures that when all expenses are deleted, localStorage is properly cleared
+    saveExpenses();
   }, [state.expenses]);
 
   // Save budgets to localStorage whenever they change
@@ -213,9 +230,9 @@ export const ExpenseProvider = ({ children }) => {
       }
     };
 
-    if (state.budgets.length > 0) {
-      saveBudgets();
-    }
+    // Always save budgets to localStorage, even if the array is empty
+    // This ensures that when all budgets are deleted, localStorage is properly cleared
+    saveBudgets();
   }, [state.budgets]);
 
   const createExpense = (expenseData) => {
@@ -227,7 +244,7 @@ export const ExpenseProvider = ({ children }) => {
 
       const newExpense = {
         ...validation.data,
-        id: Date.now().toString(),
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
