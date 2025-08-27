@@ -27,6 +27,12 @@
   font-size: 1rem;
 }
 
+.header-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
 /* Expenses Filters */
 .expenses-filters {
   margin-bottom: var(--spacing-xl);
@@ -101,13 +107,17 @@
 }
 
 .expense-item::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--accent-purple) 100%
+  );
   opacity: 0;
   transition: opacity var(--transition-normal);
   z-index: -1;
@@ -228,23 +238,23 @@
     gap: var(--spacing-lg);
     padding: var(--spacing-lg);
   }
-  
+
   .expense-icon {
     margin-right: 0;
     margin-bottom: var(--spacing-sm);
   }
-  
+
   .expense-amount {
     margin-right: 0;
     margin-bottom: var(--spacing-sm);
     align-self: flex-end;
   }
-  
+
   .expense-actions {
     margin-left: 0;
     align-self: flex-end;
   }
-  
+
   .expense-details {
     width: 100%;
   }
@@ -254,15 +264,15 @@
   .expense-item {
     padding: var(--spacing-md);
   }
-  
+
   .expense-icon {
     width: 40px;
     height: 40px;
     font-size: 1.25rem;
   }
-  
+
   .expense-amount {
     font-size: var(--font-size-lg);
     padding: var(--spacing-xs) var(--spacing-sm);
   }
-} 
+}

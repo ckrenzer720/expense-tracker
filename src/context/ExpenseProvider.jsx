@@ -26,64 +26,94 @@ const initialState = {
 };
 
 const expenseReducer = (state, action) => {
+  console.log(
+    "Expense reducer called with action:",
+    action.type,
+    action.payload
+  );
+  console.log("Current state:", state);
+
+  let newState;
+
   switch (action.type) {
     case "EXPENSE_ADD":
-      return {
+      newState = {
         ...state,
         expenses: [...state.expenses, action.payload],
       };
+      console.log("New state after EXPENSE_ADD:", newState);
+      return newState;
     case "EXPENSE_UPDATE":
-      return {
+      newState = {
         ...state,
         expenses: state.expenses.map((expense) =>
           expense.id === action.payload.id ? action.payload : expense
         ),
       };
+      console.log("New state after EXPENSE_UPDATE:", newState);
+      return newState;
     case "EXPENSE_DELETE":
-      return {
+      newState = {
         ...state,
         expenses: state.expenses.filter(
           (expense) => expense.id !== action.payload
         ),
       };
+      console.log("New state after EXPENSE_DELETE:", newState);
+      return newState;
     case "EXPENSES_SET":
-      return {
+      newState = {
         ...state,
         expenses: action.payload,
       };
+      console.log("New state after EXPENSES_SET:", newState);
+      return newState;
     case "BUDGETS_SET":
-      return {
+      newState = {
         ...state,
         budgets: action.payload,
       };
+      console.log("New state after BUDGETS_SET:", newState);
+      return newState;
     case "BUDGET_UPDATE":
-      return {
+      newState = {
         ...state,
         budgets: state.budgets.map((budget) =>
           budget.id === action.payload.id ? action.payload : budget
         ),
       };
+      console.log("New state after BUDGET_UPDATE:", newState);
+      return newState;
     case "BUDGET_ADD":
-      return {
+      newState = {
         ...state,
         budgets: [...state.budgets, action.payload],
       };
+      console.log("New state after BUDGET_ADD:", newState);
+      return newState;
     case "CURRENT_MONTH_SET":
-      return {
+      newState = {
         ...state,
         currentMonth: action.payload,
       };
+      console.log("New state after CURRENT_MONTH_SET:", newState);
+      return newState;
     case "LOADING_SET":
-      return {
+      newState = {
         ...state,
         loading: action.payload,
       };
+      console.log("New state after LOADING_SET:", newState);
+      return newState;
     case "ERROR_SET":
-      return {
+      newState = {
         ...state,
         error: action.payload,
       };
+      console.log("New state after ERROR_SET:", newState);
+      return newState;
     default:
+      console.log("Unknown action type:", action.type);
       return state;
   }
 };
@@ -95,6 +125,7 @@ export const ExpenseProvider = ({ children }) => {
   useEffect(() => {
     const loadExpenses = () => {
       try {
+        console.log("=== Loading expenses from localStorage ===");
         dispatch({ type: "LOADING_SET", payload: true });
 
         // Check if localStorage is available
@@ -105,14 +136,20 @@ export const ExpenseProvider = ({ children }) => {
         }
 
         const savedExpenses = localStorage.getItem(STORAGE_KEYS.EXPENSES);
+        console.log("Raw saved expenses from localStorage:", savedExpenses);
 
         if (savedExpenses) {
           const parsedExpenses = JSON.parse(savedExpenses);
+          console.log("Parsed expenses:", parsedExpenses);
 
           // Validate each expense
           const validExpenses = parsedExpenses.filter((expense) => {
+            console.log("Validating expense:", expense);
             const validation = validateData(expense, "expense");
+            console.log("Validation result for expense:", validation);
+
             if (!validation.isValid) {
+              console.error("Invalid expense data:", validation.error);
               logError(new Error(`Invalid expense data: ${validation.error}`), {
                 component: "ExpenseProvider",
                 action: "loadExpenses",
@@ -123,9 +160,13 @@ export const ExpenseProvider = ({ children }) => {
             return true;
           });
 
+          console.log("Valid expenses after validation:", validExpenses);
           dispatch({ type: "EXPENSES_SET", payload: validExpenses });
+        } else {
+          console.log("No saved expenses found in localStorage");
         }
       } catch (error) {
+        console.error("Error loading expenses:", error);
         logError(error, {
           component: "ExpenseProvider",
           action: "loadExpenses",
@@ -181,6 +222,9 @@ export const ExpenseProvider = ({ children }) => {
   useEffect(() => {
     const saveExpenses = () => {
       try {
+        console.log("=== Saving expenses to localStorage ===");
+        console.log("Current expenses state:", state.expenses);
+
         // Check if localStorage is available
         if (typeof localStorage === "undefined") {
           console.warn("localStorage is not available");
@@ -188,6 +232,7 @@ export const ExpenseProvider = ({ children }) => {
         }
 
         const expensesJson = JSON.stringify(state.expenses);
+        console.log("Expenses JSON to save:", expensesJson);
 
         // Check if the data is too large for localStorage
         if (expensesJson.length > 5 * 1024 * 1024) {
@@ -197,7 +242,16 @@ export const ExpenseProvider = ({ children }) => {
         }
 
         localStorage.setItem(STORAGE_KEYS.EXPENSES, expensesJson);
+        console.log("Expenses saved successfully to localStorage");
+
+        // Verify the save worked
+        const savedData = localStorage.getItem(STORAGE_KEYS.EXPENSES);
+        console.log(
+          "Verification - data read back from localStorage:",
+          savedData
+        );
       } catch (error) {
+        console.error("Error saving expenses:", error);
         logError(error, {
           component: "ExpenseProvider",
           action: "saveExpenses",
@@ -237,7 +291,10 @@ export const ExpenseProvider = ({ children }) => {
 
   const createExpense = (expenseData) => {
     try {
+      console.log("Creating expense with data:", expenseData);
       const validation = validateData(expenseData, "expense");
+      console.log("Validation result:", validation);
+
       if (!validation.isValid) {
         throw new Error(validation.error);
       }
@@ -249,8 +306,12 @@ export const ExpenseProvider = ({ children }) => {
         updatedAt: new Date().toISOString(),
       };
 
+      console.log("New expense created:", newExpense);
+      console.log("Current state before dispatch:", state);
       dispatch({ type: "EXPENSE_ADD", payload: newExpense });
+      console.log("Expense dispatched to reducer");
     } catch (error) {
+      console.error("Error creating expense:", error);
       logError(error, {
         component: "ExpenseProvider",
         action: "createExpense",
